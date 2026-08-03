@@ -328,9 +328,9 @@ export const NoticesPage: React.FC = () => {
           boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.25)',
         }}
       >
-        <Grid container spacing={3} alignItems="center">
+        <Grid container spacing={3} sx={{ alignItems: 'center' }}>
           <Grid size={{ xs: 12, md: 7 }}>
-            <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1.5 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', mb: 1.5 }}>
               <Avatar sx={{ bgcolor: '#0284c7', width: 48, height: 48 }}>
                 <CampaignIcon sx={{ fontSize: 28, color: '#fff' }} />
               </Avatar>
@@ -342,11 +342,11 @@ export const NoticesPage: React.FC = () => {
                   Official executive announcements, faculty circulars, examination schedules, and student alerts
                 </Typography>
               </Box>
-            </Stack>
+            </Box>
           </Grid>
 
           <Grid size={{ xs: 12, md: 5 }}>
-            <Stack direction="row" spacing={1.5} justifyContent={{ xs: 'flex-start', md: 'flex-end' }} flexWrap="wrap" gap={1}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5, justifyContent: { xs: 'flex-start', md: 'flex-end' }, flexWrap: 'wrap' }}>
               <Paper sx={{ p: 1.5, px: 2, bgcolor: 'rgba(255, 255, 255, 0.08)', borderRadius: 2, backdropFilter: 'blur(10px)', color: '#fff', textAlign: 'center' }}>
                 <Typography variant="caption" sx={{ color: '#94a3b8', display: 'block', fontWeight: 600 }}>
                   Total Notices
@@ -383,7 +383,7 @@ export const NoticesPage: React.FC = () => {
                   Publish Notice
                 </Button>
               )}
-            </Stack>
+            </Box>
           </Grid>
         </Grid>
       </Paper>
@@ -407,7 +407,7 @@ export const NoticesPage: React.FC = () => {
 
       {/* Filter & Search Bar */}
       <Paper sx={{ p: 2, mb: 3, borderRadius: 3, bgcolor: '#ffffff' }} elevation={1}>
-        <Grid container spacing={2} alignItems="center">
+        <Grid container spacing={2} sx={{ alignItems: 'center' }}>
           <Grid size={{ xs: 12, sm: 12, md: 4 }}>
             <form onSubmit={handleSearchSubmit}>
               <TextField
@@ -468,7 +468,7 @@ export const NoticesPage: React.FC = () => {
           </Grid>
 
           <Grid size={{ xs: 12, sm: 4, md: 3 }}>
-            <Stack direction="row" spacing={1} justifyContent="flex-end">
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, justifyContent: 'flex-end' }}>
               <Button
                 variant="outlined"
                 color="secondary"
@@ -478,7 +478,7 @@ export const NoticesPage: React.FC = () => {
               >
                 Refresh
               </Button>
-            </Stack>
+            </Box>
           </Grid>
         </Grid>
       </Paper>
@@ -489,7 +489,7 @@ export const NoticesPage: React.FC = () => {
       ) : notices.length === 0 ? (
         <Paper sx={{ p: 5, textAlign: 'center', borderRadius: 3, my: 3 }}>
           <AnnouncementIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 1 }} />
-          <Typography variant="h6" color="text.secondary" fontWeight={700}>
+          <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 700 }}>
             No notices found matching the criteria.
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -544,7 +544,7 @@ export const NoticesPage: React.FC = () => {
                       </Box>
 
                       {/* Action Tools */}
-                      <Stack direction="row" spacing={0.5} alignItems="center">
+                      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5, alignItems: 'center' }}>
                         {canPostNotice && (
                           <Tooltip title={item.pinned ? 'Unpin Notice' : 'Pin to Top'}>
                             <IconButton size="small" color={item.pinned ? 'warning' : 'default'} onClick={() => handleTogglePin(item)}>
@@ -568,7 +568,7 @@ export const NoticesPage: React.FC = () => {
                             </IconButton>
                           </Tooltip>
                         )}
-                      </Stack>
+                      </Box>
                     </Box>
 
                     {/* Notice Title */}
@@ -597,7 +597,7 @@ export const NoticesPage: React.FC = () => {
                         <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.secondary', display: 'block', mb: 1 }}>
                           ATTACHED DOCUMENTS ({item.attachments.length}):
                         </Typography>
-                        <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap' }}>
                           {item.attachments.map((att, idx) => (
                             <Chip
                               key={idx}
@@ -614,7 +614,7 @@ export const NoticesPage: React.FC = () => {
                               sx={{ fontWeight: 600, bgcolor: '#f8fafc' }}
                             />
                           ))}
-                        </Stack>
+                        </Box>
                       </Box>
                     )}
 
@@ -622,7 +622,7 @@ export const NoticesPage: React.FC = () => {
 
                     {/* Footer Meta Details */}
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-                      <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
+                      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
                         <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
                           Posted by: <strong style={{ color: '#1e293b' }}>{item.postedBy}</strong>
                           {item.postedByRole && ` (${item.postedByRole})`}
@@ -633,9 +633,9 @@ export const NoticesPage: React.FC = () => {
                           {item.department && item.department !== 'ALL' && ` • Dept: ${item.department}`}
                           {item.semester ? ` • Sem: ${item.semester}` : ''}
                         </Typography>
-                      </Stack>
+                      </Box>
 
-                      <Stack direction="row" spacing={2} alignItems="center">
+                      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
                         <Chip
                           icon={<VisibilityIcon sx={{ fontSize: '0.875rem !important' }} />}
                           label={`${item.viewsCount || 0} Views`}
@@ -658,7 +658,7 @@ export const NoticesPage: React.FC = () => {
                         >
                           Read Full Notice →
                         </Button>
-                      </Stack>
+                      </Box>
                     </Box>
                   </CardContent>
                 </Card>
@@ -783,7 +783,7 @@ export const NoticesPage: React.FC = () => {
                 <Stack spacing={1} sx={{ mb: 2 }}>
                   {formAttachments.map((att, idx) => (
                     <Paper key={idx} variant="outlined" sx={{ p: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Stack direction="row" spacing={1} alignItems="center">
+                      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}>
                         <InsertDriveFileIcon color="primary" />
                         <Box>
                           <Typography variant="body2" sx={{ fontWeight: 700 }}>
@@ -793,7 +793,7 @@ export const NoticesPage: React.FC = () => {
                             {att.fileType.toUpperCase()} • {att.size || '1.2 MB'}
                           </Typography>
                         </Box>
-                      </Stack>
+                      </Box>
                       <IconButton size="small" color="error" onClick={() => handleRemoveAttachment(idx)}>
                         <CloseIcon fontSize="small" />
                       </IconButton>
@@ -806,7 +806,7 @@ export const NoticesPage: React.FC = () => {
                 <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, display: 'block', mb: 1 }}>
                   Add Document Attachment
                 </Typography>
-                <Grid container spacing={1.5} alignItems="center">
+                <Grid container spacing={1.5} sx={{ alignItems: 'center' }}>
                   <Grid size={{ xs: 12, sm: 5 }}>
                     <TextField size="small" label="Document Title" fullWidth value={newAttName} onChange={(e) => setNewAttName(e.target.value)} placeholder="e.g. Examination_Routine.pdf" />
                   </Grid>
@@ -872,7 +872,7 @@ export const NoticesPage: React.FC = () => {
                   <Stack spacing={1.5}>
                     {viewingNotice.attachments.map((att, idx) => (
                       <Paper key={idx} variant="outlined" sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: 2 }}>
-                        <Stack direction="row" spacing={1.5} alignItems="center">
+                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5, alignItems: 'center' }}>
                           <PictureAsPdfIcon color="error" sx={{ fontSize: 32 }} />
                           <Box>
                             <Typography variant="body1" sx={{ fontWeight: 700 }}>
@@ -882,7 +882,7 @@ export const NoticesPage: React.FC = () => {
                               File format: {att.fileType.toUpperCase()} • Size: {att.size || '1.2 MB'}
                             </Typography>
                           </Box>
-                        </Stack>
+                        </Box>
                         <Button
                           variant="contained"
                           size="small"

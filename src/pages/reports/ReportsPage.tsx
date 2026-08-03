@@ -60,8 +60,8 @@ export const ReportsPage: React.FC = () => {
           color: '#fff',
         }}
       >
-        <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between" flexWrap="wrap">
-          <Stack direction="row" spacing={2} alignItems="center">
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
+          <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
             <AssessmentIcon sx={{ fontSize: 40, color: '#38bdf8' }} />
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 800, color: '#fff' }}>
@@ -81,7 +81,7 @@ export const ReportsPage: React.FC = () => {
           >
             Export Comprehensive PDF
           </Button>
-        </Stack>
+        </Box>
       </Paper>
 
       {/* Metric Cards */}
@@ -89,7 +89,7 @@ export const ReportsPage: React.FC = () => {
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ borderRadius: 3, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
             <CardContent>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
                   <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>
                     TOTAL STUDENTS
@@ -99,7 +99,7 @@ export const ReportsPage: React.FC = () => {
                   </Typography>
                 </Box>
                 <SchoolIcon sx={{ fontSize: 36, color: '#0284c7' }} />
-              </Stack>
+              </Box>
             </CardContent>
           </Card>
         </Grid>
@@ -107,7 +107,7 @@ export const ReportsPage: React.FC = () => {
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ borderRadius: 3, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
             <CardContent>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
                   <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>
                     ACADEMIC FACULTY
@@ -117,7 +117,7 @@ export const ReportsPage: React.FC = () => {
                   </Typography>
                 </Box>
                 <WorkIcon sx={{ fontSize: 36, color: '#10b981' }} />
-              </Stack>
+              </Box>
             </CardContent>
           </Card>
         </Grid>
@@ -125,7 +125,7 @@ export const ReportsPage: React.FC = () => {
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ borderRadius: 3, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
             <CardContent>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
                   <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>
                     ATTENDANCE RATE
@@ -135,7 +135,7 @@ export const ReportsPage: React.FC = () => {
                   </Typography>
                 </Box>
                 <HowToRegIcon sx={{ fontSize: 36, color: '#8b5cf6' }} />
-              </Stack>
+              </Box>
             </CardContent>
           </Card>
         </Grid>
@@ -143,7 +143,7 @@ export const ReportsPage: React.FC = () => {
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ borderRadius: 3, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
             <CardContent>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
                   <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>
                     FEE COLLECTION
@@ -153,7 +153,7 @@ export const ReportsPage: React.FC = () => {
                   </Typography>
                 </Box>
                 <AccountBalanceWalletIcon sx={{ fontSize: 36, color: '#059669' }} />
-              </Stack>
+              </Box>
             </CardContent>
           </Card>
         </Grid>

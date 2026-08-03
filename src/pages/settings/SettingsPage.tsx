@@ -272,7 +272,7 @@ export const SettingsPage: React.FC = () => {
           boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.25)',
         }}
       >
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
           <Avatar sx={{ bgcolor: primaryColor, width: 52, height: 52 }}>
             <SettingsIcon sx={{ fontSize: 30, color: '#fff' }} />
           </Avatar>
@@ -356,7 +356,7 @@ export const SettingsPage: React.FC = () => {
                 PRESET AVATARS
               </Typography>
 
-              <Stack direction="row" spacing={1} justifyContent="center" flexWrap="wrap">
+              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
                 {PRESET_AVATARS.map((url, idx) => (
                   <Avatar
                     key={idx}
@@ -371,7 +371,7 @@ export const SettingsPage: React.FC = () => {
                     }}
                   />
                 ))}
-              </Stack>
+              </Box>
             </Paper>
           </Grid>
 
@@ -425,7 +425,7 @@ export const SettingsPage: React.FC = () => {
       {/* TAB 1: CHANGE PASSWORD */}
       {activeTab === 1 && (
         <Paper sx={{ p: 4, borderRadius: 3, maxWidth: 700, mx: 'auto' }}>
-          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>
+          <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', mb: 1 }}>
             <LockIcon sx={{ fontSize: 28, color: primaryColor }} />
             <Typography variant="h6" sx={{ fontWeight: 800, color: '#0f172a' }}>
               Security & Password Reset
@@ -501,7 +501,7 @@ export const SettingsPage: React.FC = () => {
                   Primary Brand Accent Color
                 </Typography>
 
-                <Stack direction="row" spacing={1.5} flexWrap="wrap" sx={{ mb: 3 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5, flexWrap: 'wrap', mb: 3 }}>
                   {COLOR_PRESETS.map((p) => (
                     <Box
                       key={p.value}
@@ -525,7 +525,7 @@ export const SettingsPage: React.FC = () => {
                       </Typography>
                     </Box>
                   ))}
-                </Stack>
+                </Box>
               </Grid>
 
               <Grid size={{ xs: 12, md: 6 }}>
@@ -749,7 +749,7 @@ export const SettingsPage: React.FC = () => {
       {activeTab === 4 && rolePermissions.length > 0 && (
         <Stack spacing={3}>
           <Paper sx={{ p: 3, borderRadius: 3 }}>
-            <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between" flexWrap="wrap" sx={{ mb: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', mb: 2 }}>
               <Box>
                 <Typography variant="h6" sx={{ fontWeight: 800, color: '#0f172a' }}>
                   Role Access Control & Permission Matrix
@@ -768,10 +768,10 @@ export const SettingsPage: React.FC = () => {
               >
                 {isSavingPermissions ? 'Saving Role Matrix...' : 'Save Role Matrix'}
               </Button>
-            </Stack>
+            </Box>
 
             {/* Role Select Pills */}
-            <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 3 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', mb: 3 }}>
               {rolePermissions.map((rp, idx) => (
                 <Chip
                   key={rp.role}
@@ -781,7 +781,7 @@ export const SettingsPage: React.FC = () => {
                   sx={{ fontWeight: 800, py: 2, px: 1, cursor: 'pointer' }}
                 />
               ))}
-            </Stack>
+            </Box>
 
             <Alert severity="info" sx={{ mb: 3, borderRadius: 2 }}>
               Managing permissions for <strong>{rolePermissions[selectedRoleIndex].role}</strong>: {rolePermissions[selectedRoleIndex].description}

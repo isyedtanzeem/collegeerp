@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import SystemSetting from '../models/SystemSetting.js';
 import RolePermission from '../models/RolePermission.js';
-import User from '../models/User.js';
+import User, { UserRole } from '../models/User.js';
 import { AuthRequest } from '../middleware/authMiddleware.js';
 
 // Default initial permissions matrix for seed/fallback
@@ -155,7 +155,7 @@ export const updateRolePermission = async (req: AuthRequest, res: Response): Pro
     const { role } = req.params;
     const { permissions, description } = req.body;
 
-    let rolePerm = await RolePermission.findOne({ role });
+    let rolePerm = await RolePermission.findOne({ role: role as UserRole });
     if (!rolePerm) {
       rolePerm = new RolePermission({ role, description, permissions });
     } else {

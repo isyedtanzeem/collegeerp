@@ -23,7 +23,17 @@ import noticeRoutes from './server/routes/noticeRoutes.js';
 import subjectRoutes from './server/routes/subjectRoutes.js';
 import studentRoutes from './server/routes/studentRoutes.js';
 import facultyRoutes from './server/routes/facultyRoutes.js';
+import attendanceRoutes from './server/routes/attendanceRoutes.js';
+import examRoutes from './server/routes/examRoutes.js';
+import marksRoutes from './server/routes/marksRoutes.js';
+import feesRoutes from './server/routes/feesRoutes.js';
+import libraryRoutes from './server/routes/libraryRoutes.js';
+import assignmentRoutes from './server/routes/assignmentRoutes.js';
+import leaveRoutes from './server/routes/leaveRoutes.js';
+import timetableRoutes from './server/routes/timetableRoutes.js';
 import statsRoutes from './server/routes/statsRoutes.js';
+import reportRoutes from './server/routes/reportRoutes.js';
+import settingRoutes from './server/routes/settingRoutes.js';
 
 import { notFound, errorHandler } from './server/middleware/errorMiddleware.js';
 
@@ -59,8 +69,18 @@ async function startServer() {
   app.use('/api/v1/subjects', subjectRoutes);
   app.use('/api/v1/students', studentRoutes);
   app.use('/api/v1/faculty', facultyRoutes);
+  app.use('/api/v1/attendance', attendanceRoutes);
+  app.use('/api/v1/exams', examRoutes);
+  app.use('/api/v1/marks', marksRoutes);
+  app.use('/api/v1/fees', feesRoutes);
+  app.use('/api/v1/library', libraryRoutes);
+  app.use('/api/v1/assignments', assignmentRoutes);
+  app.use('/api/v1/leaves', leaveRoutes);
+  app.use('/api/v1/timetable', timetableRoutes);
   app.use('/api/v1/notices', noticeRoutes);
   app.use('/api/v1/stats', statsRoutes);
+  app.use('/api/v1/reports', reportRoutes);
+  app.use('/api/v1/settings', settingRoutes);
 
   // Health check endpoint with Database connectivity status
   app.get('/api/health', async (_req, res) => {

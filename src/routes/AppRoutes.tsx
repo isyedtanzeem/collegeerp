@@ -14,7 +14,17 @@ import { CoursesPage } from '../pages/courses/CoursesPage.js';
 import { SubjectsPage } from '../pages/subjects/SubjectsPage.js';
 import { StudentsPage } from '../pages/students/StudentsPage.js';
 import { FacultyPage } from '../pages/faculty/FacultyPage.js';
+import { AttendancePage } from '../pages/attendance/AttendancePage.js';
+import { ExamsPage } from '../pages/exams/ExamsPage.js';
+import { MarksPage } from '../pages/marks/MarksPage.js';
+import { FeesPage } from '../pages/fees/FeesPage.js';
+import { LibraryPage } from '../pages/library/LibraryPage.js';
+import { AssignmentsPage } from '../pages/assignments/AssignmentsPage.js';
+import { LeavePage } from '../pages/leaves/LeavePage.js';
+import { TimetablePage } from '../pages/timetable/TimetablePage.js';
 import { NoticesPage } from '../pages/notices/NoticesPage.js';
+import { ReportsPage } from '../pages/reports/ReportsPage.js';
+import { SettingsPage } from '../pages/settings/SettingsPage.js';
 import { ProfilePage } from '../pages/profile/ProfilePage.js';
 import { UnauthorizedPage } from '../pages/UnauthorizedPage.js';
 import { NotFoundPage } from '../pages/NotFoundPage.js';
@@ -45,7 +55,17 @@ export const AppRoutes: React.FC = () => {
           <Route path="/subjects" element={<SubjectsPage />} />
           <Route path="/students" element={<StudentsPage />} />
           <Route path="/faculty" element={<FacultyPage />} />
+          <Route path="/attendance" element={<AttendancePage />} />
+          <Route path="/exams" element={<ExamsPage />} />
+          <Route path="/marks" element={<MarksPage />} />
+          <Route path="/fees" element={<FeesPage />} />
+          <Route path="/library" element={<LibraryPage />} />
+          <Route path="/assignments" element={<AssignmentsPage />} />
+          <Route path="/leaves" element={<LeavePage />} />
+          <Route path="/timetable" element={<TimetablePage />} />
           <Route path="/notices" element={<NoticesPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
           <Route path="*" element={<NotFoundPage />} />

@@ -31,6 +31,8 @@ export const DashboardLayout: React.FC = () => {
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
+          overflowY: 'auto',
+          overflowX: 'hidden',
         }}
       >
         <Toolbar sx={{ minHeight: 64 }} />

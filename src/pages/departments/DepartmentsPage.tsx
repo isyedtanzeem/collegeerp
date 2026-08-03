@@ -362,7 +362,7 @@ export const DepartmentsPage: React.FC = () => {
 
       {/* Toolbar Controls: Search, Filter, View Mode */}
       <Paper variant="outlined" sx={{ p: 2, mb: 3, borderRadius: 3 }}>
-        <Grid container spacing={2} alignItems="center">
+        <Grid container spacing={2} sx={{ alignItems: 'center' }}>
           <Grid size={{ xs: 12, md: 5 }}>
             <TextField
               fullWidth
@@ -370,19 +370,21 @@ export const DepartmentsPage: React.FC = () => {
               placeholder="Search by department name, code, HOD name..."
               value={search}
               onChange={handleSearchChange}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon color="action" />
-                  </InputAdornment>
-                ),
-                endAdornment: search ? (
-                  <InputAdornment position="end">
-                    <IconButton size="small" onClick={handleClearSearch}>
-                      <ClearIcon fontSize="small" />
-                    </IconButton>
-                  </InputAdornment>
-                ) : null,
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon color="action" />
+                    </InputAdornment>
+                  ),
+                  endAdornment: search ? (
+                    <InputAdornment position="end">
+                      <IconButton size="small" onClick={handleClearSearch}>
+                        <ClearIcon fontSize="small" />
+                      </IconButton>
+                    </InputAdornment>
+                  ) : null,
+                },
               }}
             />
           </Grid>
@@ -602,7 +604,7 @@ export const DepartmentsPage: React.FC = () => {
                   </TableCell>
                   {isManagement && (
                     <TableCell align="right">
-                      <Stack direction="row" spacing={1} justifyContent="flex-end">
+                      <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end' }}>
                         <IconButton size="small" color="primary" onClick={() => handleOpenEdit(dept)}>
                           <EditIcon fontSize="small" />
                         </IconButton>
@@ -638,7 +640,7 @@ export const DepartmentsPage: React.FC = () => {
         onClose={() => !isSubmitting && setOpenFormDialog(false)}
         maxWidth="sm"
         fullWidth
-        PaperProps={{ sx: { borderRadius: 3, p: 1 } }}
+        slotProps={{ paper: { sx: { borderRadius: 3, p: 1 } } }}
       >
         <DialogTitle sx={{ fontWeight: 700 }}>
           {selectedDept ? 'Edit Department' : 'Create New Department'}
@@ -745,7 +747,7 @@ export const DepartmentsPage: React.FC = () => {
         onClose={() => !isDeleting && setOpenDeleteDialog(false)}
         maxWidth="xs"
         fullWidth
-        PaperProps={{ sx: { borderRadius: 3 } }}
+        slotProps={{ paper: { sx: { borderRadius: 3 } } }}
       >
         <DialogTitle sx={{ fontWeight: 700, color: 'error.main' }}>
           Delete Department

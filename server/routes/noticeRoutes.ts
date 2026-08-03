@@ -1,5 +1,12 @@
 import express from 'express';
-import { getNotices, createNotice, deleteNotice } from '../controllers/noticeController.js';
+import {
+  getNotices,
+  getNoticeById,
+  createNotice,
+  updateNotice,
+  deleteNotice,
+  togglePinNotice,
+} from '../controllers/noticeController.js';
 import { protect, authorizeRoles } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -13,6 +20,13 @@ router
 
 router
   .route('/:id')
-  .delete(authorizeRoles('SUPER_ADMIN', 'PRINCIPAL'), deleteNotice);
+  .get(getNoticeById)
+  .put(authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'), updateNotice)
+  .delete(authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'), deleteNotice);
+
+router
+  .route('/:id/pin')
+  .patch(authorizeRoles('SUPER_ADMIN', 'PRINCIPAL', 'HOD'), togglePinNotice);
 
 export default router;
+

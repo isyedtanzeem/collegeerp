@@ -17,10 +17,18 @@ import BookIcon from '@mui/icons-material/Book';
 import ClassIcon from '@mui/icons-material/Class';
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import PersonIcon from '@mui/icons-material/Person';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import GradeIcon from '@mui/icons-material/Grade';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import EventBusyIcon from '@mui/icons-material/EventBusy';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.js';
 import { UserRole } from '../../types/index.js';
@@ -81,6 +89,30 @@ const NAV_ITEMS: NavItem[] = [
     allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
   },
   {
+    title: 'Attendance Module',
+    path: '/attendance',
+    icon: <HowToRegIcon />,
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+  },
+  {
+    title: 'Examination Module',
+    path: '/exams',
+    icon: <FactCheckIcon />,
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+  },
+  {
+    title: 'Marks & Results',
+    path: '/marks',
+    icon: <GradeIcon />,
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+  },
+  {
+    title: 'Fees & Accounts',
+    path: '/fees',
+    icon: <AccountBalanceWalletIcon />,
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'ACCOUNTANT', 'STUDENT'],
+  },
+  {
     title: 'Notice Board',
     path: '/notices',
     icon: <CampaignIcon />,
@@ -93,9 +125,38 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     title: 'Library Portal',
-    path: '/dashboard',
+    path: '/library',
     icon: <MenuBookIcon />,
-    allowedRoles: ['LIBRARIAN', 'SUPER_ADMIN', 'STUDENT', 'FACULTY'],
+    allowedRoles: ['LIBRARIAN', 'SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+  },
+  {
+    title: 'Assignment Module',
+    path: '/assignments',
+    icon: <AssignmentIcon />,
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+  },
+  {
+    title: 'Leave Module',
+    path: '/leaves',
+    icon: <EventBusyIcon />,
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+  },
+  {
+    title: 'Timetable Module',
+    path: '/timetable',
+    icon: <CalendarMonthIcon />,
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+  },
+  {
+    title: 'Reports & Analytics',
+    path: '/reports',
+    icon: <AssessmentIcon />,
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'ACCOUNTANT'],
+  },
+  {
+    title: 'Settings Module',
+    path: '/settings',
+    icon: <SettingsIcon />,
   },
   {
     title: 'My Profile',

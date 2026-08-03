@@ -14,6 +14,7 @@ export const AuthLayout: React.FC = () => {
         backgroundImage: 'radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%)',
         py: 4,
         px: 2,
+        overflowY: 'auto',
       }}
     >
       <Container maxWidth="sm">

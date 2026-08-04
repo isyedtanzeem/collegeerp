@@ -424,12 +424,18 @@ export const FeesPage: React.FC = () => {
           scrollButtons="auto"
           sx={{ px: 2 }}
         >
-          <Tab icon={<AccountBalanceWalletIcon />} iconPosition="start" label="Fees Dashboard" sx={{ fontWeight: 700, py: 2 }} />
-          <Tab icon={<ReceiptIcon />} iconPosition="start" label="Fee Roster & Ledger" sx={{ fontWeight: 700, py: 2 }} />
-          <Tab icon={<MoneyOffIcon />} iconPosition="start" label="Pending & Overdue Fees" sx={{ fontWeight: 700, py: 2 }} />
-          <Tab icon={<PaymentIcon />} iconPosition="start" label="Collect Payment" sx={{ fontWeight: 700, py: 2 }} />
+          <Tab icon={<AccountBalanceWalletIcon />} iconPosition="start" label="Fee Summary & Dashboard" sx={{ fontWeight: 700, py: 2 }} />
+          {user?.role !== 'STUDENT' && (
+            <Tab icon={<ReceiptIcon />} iconPosition="start" label="Fee Roster & Ledger" sx={{ fontWeight: 700, py: 2 }} />
+          )}
+          <Tab icon={<MoneyOffIcon />} iconPosition="start" label="Pending Fees & Dues" sx={{ fontWeight: 700, py: 2 }} />
+          {user?.role !== 'STUDENT' && (
+            <Tab icon={<PaymentIcon />} iconPosition="start" label="Collect Payment" sx={{ fontWeight: 700, py: 2 }} />
+          )}
           <Tab icon={<PrintIcon />} iconPosition="start" label="Payment Receipts History" sx={{ fontWeight: 700, py: 2 }} />
-          <Tab icon={<AutoModeIcon />} iconPosition="start" label="Batch Fee Assignment" sx={{ fontWeight: 700, py: 2 }} />
+          {user?.role !== 'STUDENT' && (
+            <Tab icon={<AutoModeIcon />} iconPosition="start" label="Batch Fee Assignment" sx={{ fontWeight: 700, py: 2 }} />
+          )}
         </Tabs>
       </Paper>
 

@@ -26,6 +26,8 @@ import { NoticesPage } from '../pages/notices/NoticesPage.js';
 import { ReportsPage } from '../pages/reports/ReportsPage.js';
 import { SettingsPage } from '../pages/settings/SettingsPage.js';
 import { ProfilePage } from '../pages/profile/ProfilePage.js';
+import { StudyMaterialsPage } from '../pages/materials/StudyMaterialsPage.js';
+import { NotificationsPage } from '../pages/notifications/NotificationsPage.js';
 import { UnauthorizedPage } from '../pages/UnauthorizedPage.js';
 import { NotFoundPage } from '../pages/NotFoundPage.js';
 
@@ -45,26 +47,35 @@ export const AppRoutes: React.FC = () => {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<DashboardPage />} />
 
-          {/* User Management restricted to Super Admin, Principal, and HOD */}
+          {/* Admin / Staff Management Routes */}
           <Route element={<ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PRINCIPAL', 'HOD']} />}>
             <Route path="/users" element={<UsersPage />} />
+            <Route path="/faculty" element={<FacultyPage />} />
           </Route>
 
-          <Route path="/departments" element={<DepartmentsPage />} />
-          <Route path="/courses" element={<CoursesPage />} />
+          <Route element={<ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY']} />}>
+            <Route path="/departments" element={<DepartmentsPage />} />
+            <Route path="/courses" element={<CoursesPage />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'ACCOUNTANT']} />}>
+            <Route path="/students" element={<StudentsPage />} />
+            <Route path="/reports" element={<ReportsPage />} />
+          </Route>
+
+          {/* Student & Shared Portal Routes */}
           <Route path="/subjects" element={<SubjectsPage />} />
-          <Route path="/students" element={<StudentsPage />} />
-          <Route path="/faculty" element={<FacultyPage />} />
           <Route path="/attendance" element={<AttendancePage />} />
           <Route path="/exams" element={<ExamsPage />} />
           <Route path="/marks" element={<MarksPage />} />
           <Route path="/fees" element={<FeesPage />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/assignments" element={<AssignmentsPage />} />
+          <Route path="/materials" element={<StudyMaterialsPage />} />
           <Route path="/leaves" element={<LeavePage />} />
           <Route path="/timetable" element={<TimetablePage />} />
           <Route path="/notices" element={<NoticesPage />} />
-          <Route path="/reports" element={<ReportsPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />

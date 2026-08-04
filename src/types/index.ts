@@ -17,6 +17,13 @@ export interface User {
   department?: string;
   designation?: string;
   enrollmentNo?: string;
+  rollNo?: string;
+  studentId?: string;
+  course?: string;
+  address?: string;
+  emergencyContact?: string;
+  guardianName?: string;
+  guardianPhone?: string;
   employeeId?: string;
   semester?: number;
   status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';

@@ -30,6 +30,8 @@ import EventBusyIcon from '@mui/icons-material/EventBusy';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SettingsIcon from '@mui/icons-material/Settings';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.js';
 import { UserRole } from '../../types/index.js';
@@ -48,7 +50,24 @@ interface NavItem {
   allowedRoles?: UserRole[];
 }
 
-const NAV_ITEMS: NavItem[] = [
+const STUDENT_NAV_ITEMS: NavItem[] = [
+  { title: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
+  { title: 'My Profile', path: '/profile', icon: <PersonIcon /> },
+  { title: 'My Subjects', path: '/subjects', icon: <ClassIcon /> },
+  { title: 'Attendance', path: '/attendance', icon: <HowToRegIcon /> },
+  { title: 'Results', path: '/marks', icon: <GradeIcon /> },
+  { title: 'Assignments', path: '/assignments', icon: <AssignmentIcon /> },
+  { title: 'Study Materials', path: '/materials', icon: <MenuBookIcon /> },
+  { title: 'Timetable', path: '/timetable', icon: <CalendarMonthIcon /> },
+  { title: 'Fees', path: '/fees', icon: <AccountBalanceWalletIcon /> },
+  { title: 'Library', path: '/library', icon: <BookIcon /> },
+  { title: 'Leave Requests', path: '/leaves', icon: <EventBusyIcon /> },
+  { title: 'Notices', path: '/notices', icon: <CampaignIcon /> },
+  { title: 'Notifications', path: '/notifications', icon: <NotificationsIcon /> },
+  { title: 'Settings', path: '/settings', icon: <SettingsIcon /> },
+];
+
+const ADMIN_NAV_ITEMS: NavItem[] = [
   {
     title: 'Dashboard',
     path: '/dashboard',
@@ -64,55 +83,55 @@ const NAV_ITEMS: NavItem[] = [
     title: 'Departments',
     path: '/departments',
     icon: <BusinessIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'],
   },
   {
     title: 'Course Catalog',
     path: '/courses',
     icon: <BookIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'],
   },
   {
     title: 'Subject Module',
     path: '/subjects',
     icon: <ClassIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'],
   },
   {
     title: 'Student Module',
     path: '/students',
     icon: <SchoolIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'ACCOUNTANT'],
   },
   {
     title: 'Faculty Module',
     path: '/faculty',
     icon: <WorkIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD'],
   },
   {
     title: 'Attendance Module',
     path: '/attendance',
     icon: <HowToRegIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'],
   },
   {
     title: 'Examination Module',
     path: '/exams',
     icon: <FactCheckIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'],
   },
   {
     title: 'Marks & Results',
     path: '/marks',
     icon: <GradeIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'],
   },
   {
     title: 'Fees & Accounts',
     path: '/fees',
     icon: <AccountBalanceWalletIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'ACCOUNTANT', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'ACCOUNTANT'],
   },
   {
     title: 'Notice Board',
@@ -129,25 +148,25 @@ const NAV_ITEMS: NavItem[] = [
     title: 'Library Portal',
     path: '/library',
     icon: <MenuBookIcon />,
-    allowedRoles: ['LIBRARIAN', 'SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['LIBRARIAN', 'SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'],
   },
   {
     title: 'Assignment Module',
     path: '/assignments',
     icon: <AssignmentIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'],
   },
   {
     title: 'Leave Module',
     path: '/leaves',
     icon: <EventBusyIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'],
   },
   {
     title: 'Timetable Module',
     path: '/timetable',
     icon: <CalendarMonthIcon />,
-    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY', 'STUDENT'],
+    allowedRoles: ['SUPER_ADMIN', 'PRINCIPAL', 'HOD', 'FACULTY'],
   },
   {
     title: 'Reports & Analytics',
@@ -168,16 +187,18 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth, collapsed = false }) => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
   const userRole = user?.role || 'STUDENT';
 
-  const visibleNavItems = NAV_ITEMS.filter((item) => {
-    if (!item.allowedRoles) return true;
-    return item.allowedRoles.includes(userRole);
-  });
+  const visibleNavItems = userRole === 'STUDENT'
+    ? STUDENT_NAV_ITEMS
+    : ADMIN_NAV_ITEMS.filter((item) => {
+        if (!item.allowedRoles) return true;
+        return item.allowedRoles.includes(userRole);
+      });
 
   const renderContent = (isCollapsedMode: boolean) => (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', pt: 2, overflowX: 'hidden' }}>
@@ -257,6 +278,57 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth, co
             </ListItem>
           );
         })}
+
+        <ListItem disablePadding sx={{ mt: 1, mb: 0.5 }}>
+          {isCollapsedMode ? (
+            <Tooltip title="Logout" placement="right" arrow>
+              <ListItemButton
+                onClick={logout}
+                sx={{
+                  borderRadius: 2,
+                  py: 1.2,
+                  px: 1.2,
+                  justifyContent: 'center',
+                  minHeight: 44,
+                  color: 'error.main',
+                  '&:hover': { bgcolor: 'error.50' },
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', color: 'error.main' }}>
+                  <LogoutIcon />
+                </ListItemIcon>
+              </ListItemButton>
+            </Tooltip>
+          ) : (
+            <ListItemButton
+              onClick={logout}
+              sx={{
+                borderRadius: 2,
+                py: 1.2,
+                px: 2,
+                minHeight: 44,
+                color: 'error.main',
+                '&:hover': { bgcolor: 'error.50' },
+              }}
+            >
+              <ListItemIcon sx={{ minWidth: 40, mr: 0.5, justifyContent: 'center', color: 'error.main' }}>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Logout"
+                slotProps={{
+                  primary: {
+                    sx: {
+                      fontSize: '0.9rem',
+                      fontWeight: 700,
+                      whiteSpace: 'nowrap',
+                    },
+                  },
+                }}
+              />
+            </ListItemButton>
+          )}
+        </ListItem>
       </List>
 
       <Box sx={{ p: isCollapsedMode ? 1.5 : 2, bgcolor: 'background.default', borderTop: '1px solid #e2e8f0', mt: 'auto', textAlign: 'center' }}>

@@ -417,30 +417,36 @@ export const AttendancePage: React.FC = () => {
           scrollButtons="auto"
           sx={{ px: 2 }}
         >
-          <Tab
-            icon={<HowToRegIcon />}
-            iconPosition="start"
-            label="Faculty Attendance Marker"
-            sx={{ fontWeight: 700, py: 2 }}
-          />
-          <Tab
-            icon={<AssessmentIcon />}
-            iconPosition="start"
-            label="Monthly Reports & Matrix"
-            sx={{ fontWeight: 700, py: 2 }}
-          />
+          {userRole !== 'STUDENT' && (
+            <Tab
+              icon={<HowToRegIcon />}
+              iconPosition="start"
+              label="Faculty Attendance Marker"
+              sx={{ fontWeight: 700, py: 2 }}
+            />
+          )}
+          {userRole !== 'STUDENT' && (
+            <Tab
+              icon={<AssessmentIcon />}
+              iconPosition="start"
+              label="Monthly Reports & Matrix"
+              sx={{ fontWeight: 700, py: 2 }}
+            />
+          )}
           <Tab
             icon={<PersonIcon />}
             iconPosition="start"
-            label="Student Attendance % View"
+            label="My Attendance & Subject Breakdown"
             sx={{ fontWeight: 700, py: 2 }}
           />
-          <Tab
-            icon={<CalendarMonthIcon />}
-            iconPosition="start"
-            label="Admin Summary & Audit Logs"
-            sx={{ fontWeight: 700, py: 2 }}
-          />
+          {userRole !== 'STUDENT' && (
+            <Tab
+              icon={<CalendarMonthIcon />}
+              iconPosition="start"
+              label="Admin Summary & Audit Logs"
+              sx={{ fontWeight: 700, py: 2 }}
+            />
+          )}
         </Tabs>
       </Paper>
 
@@ -888,38 +894,40 @@ export const AttendancePage: React.FC = () => {
       {/* ========================================================================= */}
       {activeTab === 2 && (
         <Box>
-          <Paper sx={{ p: 2.5, mb: 3, borderRadius: 3, border: '1px solid #e2e8f0' }}>
-            <Grid container spacing={2} sx={{ alignItems: 'center' }}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Select Student Profile</InputLabel>
-                  <Select
-                    value={selectedStudentId}
-                    label="Select Student Profile"
-                    onChange={(e) => setSelectedStudentId(e.target.value)}
-                  >
-                    {students.map((std) => (
-                      <MenuItem key={std._id} value={std._id}>
-                        {std.name} ({std.studentId || std.admissionNumber}) — {std.department}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
+          {userRole !== 'STUDENT' && (
+            <Paper sx={{ p: 2.5, mb: 3, borderRadius: 3, border: '1px solid #e2e8f0' }}>
+              <Grid container spacing={2} sx={{ alignItems: 'center' }}>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Select Student Profile</InputLabel>
+                    <Select
+                      value={selectedStudentId}
+                      label="Select Student Profile"
+                      onChange={(e) => setSelectedStudentId(e.target.value)}
+                    >
+                      {students.map((std) => (
+                        <MenuItem key={std._id} value={std._id}>
+                          {std.name} ({std.studentId || std.admissionNumber}) — {std.department}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-              <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Button
-                  variant="outlined"
-                  startIcon={<RefreshIcon />}
-                  onClick={() => fetchStudentStats(selectedStudentId)}
-                  disabled={loadingStudentStats}
-                  sx={{ borderRadius: 2 }}
-                >
-                  Refresh Stats
-                </Button>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
+                    variant="outlined"
+                    startIcon={<RefreshIcon />}
+                    onClick={() => fetchStudentStats(selectedStudentId)}
+                    disabled={loadingStudentStats}
+                    sx={{ borderRadius: 2 }}
+                  >
+                    Refresh Stats
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          </Paper>
+            </Paper>
+          )}
 
           {loadingStudentStats ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>

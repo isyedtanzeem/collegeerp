@@ -490,14 +490,16 @@ export const AssignmentsPage: React.FC = () => {
             >
               Refresh
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={handleOpenCreateAssignment}
-            >
-              Create Assignment
-            </Button>
+            {user?.role !== 'STUDENT' && (
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AddIcon />}
+                onClick={handleOpenCreateAssignment}
+              >
+                Create Assignment
+              </Button>
+            )}
           </Stack>
         </Stack>
       </Paper>
@@ -600,18 +602,20 @@ export const AssignmentsPage: React.FC = () => {
           textColor="primary"
           sx={{ px: 2, borderBottom: 1, borderColor: 'divider' }}
         >
-          <Tab icon={<AssignmentIcon />} iconPosition="start" label="Faculty Uploads & Catalog" />
-          <Tab icon={<UploadFileIcon />} iconPosition="start" label="Student Submission Desk" />
-          <Tab
-            icon={
-              <Badge badgeContent={stats?.pendingGrading || 0} color="warning">
-                <RateReviewIcon />
-              </Badge>
-            }
-            iconPosition="start"
-            label="Grading & Feedback Desk"
-          />
-          <Tab icon={<GradeIcon />} iconPosition="start" label="My Gradebook & History" />
+          <Tab icon={<AssignmentIcon />} iconPosition="start" label="Assignments Catalog" />
+          <Tab icon={<UploadFileIcon />} iconPosition="start" label="Submit Assignment" />
+          {user?.role !== 'STUDENT' && (
+            <Tab
+              icon={
+                <Badge badgeContent={stats?.pendingGrading || 0} color="warning">
+                  <RateReviewIcon />
+                </Badge>
+              }
+              iconPosition="start"
+              label="Grading & Feedback Desk"
+            />
+          )}
+          <Tab icon={<GradeIcon />} iconPosition="start" label="My Submissions & Marks" />
         </Tabs>
 
         {/* TAB 0: FACULTY UPLOADS & ASSIGNMENTS CATALOG */}

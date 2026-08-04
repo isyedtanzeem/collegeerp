@@ -68,7 +68,7 @@ export const MarksPage: React.FC = () => {
   const { user } = useAuth();
 
   // Navigation Tabs: 0 -> Gradebook CRUD, 1 -> Grade Calculator, 2 -> Result Generator, 3 -> Student Result Page, 4 -> Academic Transcript
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<number>(user?.role === 'STUDENT' ? 3 : 0);
 
   // Metadata dropdown lists
   const [students, setStudents] = useState<Student[]>([]);
@@ -155,8 +155,9 @@ export const MarksPage: React.FC = () => {
 
       if (stdRes.success && stdRes.students.length > 0) {
         setStudents(stdRes.students);
-        setLookupStudentId(stdRes.students[0]._id);
-        setTranscriptStudentId(stdRes.students[0]._id);
+        const defaultId = (user?.role === 'STUDENT' && user?._id) ? user._id : stdRes.students[0]._id;
+        setLookupStudentId(defaultId);
+        setTranscriptStudentId(defaultId);
       }
       if (examRes.success && examRes.exams.length > 0) setExams(examRes.exams);
       if (subjRes.success) setSubjects(subjRes.subjects || []);
@@ -379,10 +380,16 @@ export const MarksPage: React.FC = () => {
           scrollButtons="auto"
           sx={{ px: 2 }}
         >
-          <Tab icon={<GradeIcon />} iconPosition="start" label="Marks Gradebook" sx={{ fontWeight: 700, py: 2 }} />
-          <Tab icon={<CalculateIcon />} iconPosition="start" label="Grade Calculator" sx={{ fontWeight: 700, py: 2 }} />
-          <Tab icon={<AutoModeIcon />} iconPosition="start" label="Batch Result Generator" sx={{ fontWeight: 700, py: 2 }} />
-          <Tab icon={<SchoolIcon />} iconPosition="start" label="Student Result Page" sx={{ fontWeight: 700, py: 2 }} />
+          {user?.role !== 'STUDENT' && (
+            <Tab icon={<GradeIcon />} iconPosition="start" label="Marks Gradebook" sx={{ fontWeight: 700, py: 2 }} />
+          )}
+          {user?.role !== 'STUDENT' && (
+            <Tab icon={<CalculateIcon />} iconPosition="start" label="Grade Calculator" sx={{ fontWeight: 700, py: 2 }} />
+          )}
+          {user?.role !== 'STUDENT' && (
+            <Tab icon={<AutoModeIcon />} iconPosition="start" label="Batch Result Generator" sx={{ fontWeight: 700, py: 2 }} />
+          )}
+          <Tab icon={<SchoolIcon />} iconPosition="start" label="My Semester Results" sx={{ fontWeight: 700, py: 2 }} />
           <Tab icon={<WorkspacePremiumIcon />} iconPosition="start" label="Official Academic Transcript" sx={{ fontWeight: 700, py: 2 }} />
         </Tabs>
       </Paper>
@@ -845,31 +852,33 @@ export const MarksPage: React.FC = () => {
       {/* ========================================================================= */}
       {activeTab === 3 && (
         <Box>
-          <Paper sx={{ p: 2.5, mb: 3, borderRadius: 3, border: '1px solid #e2e8f0' }}>
-            <Grid container spacing={2} sx={{ alignItems: 'center' }}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Select Student Result Sheet</InputLabel>
-                  <Select value={lookupStudentId} label="Select Student Result Sheet" onChange={(e) => setLookupStudentId(e.target.value)}>
-                    {students.map((std) => (
-                      <MenuItem key={std._id} value={std._id}>
-                        {std.name} ({std.studentId || std.admissionNumber}) — {std.department}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
+          {user?.role !== 'STUDENT' && (
+            <Paper sx={{ p: 2.5, mb: 3, borderRadius: 3, border: '1px solid #e2e8f0' }}>
+              <Grid container spacing={2} sx={{ alignItems: 'center' }}>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Select Student Result Sheet</InputLabel>
+                    <Select value={lookupStudentId} label="Select Student Result Sheet" onChange={(e) => setLookupStudentId(e.target.value)}>
+                      {students.map((std) => (
+                        <MenuItem key={std._id} value={std._id}>
+                          {std.name} ({std.studentId || std.admissionNumber}) — {std.department}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-              <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-                <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => window.print()}>
-                  Print Result Card
-                </Button>
-                <Button variant="outlined" startIcon={<RefreshIcon />} onClick={() => fetchStudentResultLookup(lookupStudentId)}>
-                  Refresh
-                </Button>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                  <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => window.print()}>
+                    Print Result Card
+                  </Button>
+                  <Button variant="outlined" startIcon={<RefreshIcon />} onClick={() => fetchStudentResultLookup(lookupStudentId)}>
+                    Refresh
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          </Paper>
+            </Paper>
+          )}
 
           {loadingStudentResult ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
@@ -978,32 +987,33 @@ export const MarksPage: React.FC = () => {
       {/* ========================================================================= */}
       {activeTab === 4 && (
         <Box>
-          {/* Student Selector */}
-          <Paper sx={{ p: 2.5, mb: 3, borderRadius: 3, border: '1px solid #e2e8f0' }}>
-            <Grid container spacing={2} sx={{ alignItems: 'center' }}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Select Student for Official Transcript</InputLabel>
-                  <Select value={transcriptStudentId} label="Select Student for Official Transcript" onChange={(e) => setTranscriptStudentId(e.target.value)}>
-                    {students.map((std) => (
-                      <MenuItem key={std._id} value={std._id}>
-                        {std.name} ({std.studentId || std.admissionNumber}) — {std.department}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
+          {user?.role !== 'STUDENT' && (
+            <Paper sx={{ p: 2.5, mb: 3, borderRadius: 3, border: '1px solid #e2e8f0' }}>
+              <Grid container spacing={2} sx={{ alignItems: 'center' }}>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Select Student for Official Transcript</InputLabel>
+                    <Select value={transcriptStudentId} label="Select Student for Official Transcript" onChange={(e) => setTranscriptStudentId(e.target.value)}>
+                      {students.map((std) => (
+                        <MenuItem key={std._id} value={std._id}>
+                          {std.name} ({std.studentId || std.admissionNumber}) — {std.department}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-              <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-                <Button variant="contained" startIcon={<PrintIcon />} onClick={() => window.print()} sx={{ fontWeight: 800 }}>
-                  Print Official Transcript
-                </Button>
-                <Button variant="outlined" startIcon={<RefreshIcon />} onClick={() => fetchAcademicTranscript(transcriptStudentId)}>
-                  Refresh
-                </Button>
+                <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                  <Button variant="contained" startIcon={<PrintIcon />} onClick={() => window.print()} sx={{ fontWeight: 800 }}>
+                    Print Official Transcript
+                  </Button>
+                  <Button variant="outlined" startIcon={<RefreshIcon />} onClick={() => fetchAcademicTranscript(transcriptStudentId)}>
+                    Refresh
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          </Paper>
+            </Paper>
+          )}
 
           {loadingTranscript ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>

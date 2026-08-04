@@ -525,22 +525,26 @@ export const LibraryPage: React.FC = () => {
             >
               Refresh Data
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={handleOpenCreateBook}
-            >
-              Add New Book
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<AutoStoriesIcon />}
-              onClick={() => handleOpenIssueForBook()}
-            >
-              Issue Book
-            </Button>
+            {user?.role !== 'STUDENT' && (
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddIcon />}
+                  onClick={handleOpenCreateBook}
+                >
+                  Add New Book
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<AutoStoriesIcon />}
+                  onClick={() => handleOpenIssueForBook()}
+                >
+                  Issue Book
+                </Button>
+              </>
+            )}
           </Stack>
         </Stack>
       </Paper>
@@ -645,11 +649,17 @@ export const LibraryPage: React.FC = () => {
           sx={{ px: 2, borderBottom: 1, borderColor: 'divider' }}
         >
           <Tab icon={<MenuBookIcon />} iconPosition="start" label="Books Catalog" />
-          <Tab icon={<CategoryIcon />} iconPosition="start" label="Categories" />
-          <Tab icon={<AutoStoriesIcon />} iconPosition="start" label="Issue Book Desk" />
-          <Tab icon={<AssignmentReturnIcon />} iconPosition="start" label="Return Book Desk" />
+          {user?.role !== 'STUDENT' && (
+            <Tab icon={<CategoryIcon />} iconPosition="start" label="Categories" />
+          )}
+          {user?.role !== 'STUDENT' && (
+            <Tab icon={<AutoStoriesIcon />} iconPosition="start" label="Issue Book Desk" />
+          )}
+          {user?.role !== 'STUDENT' && (
+            <Tab icon={<AssignmentReturnIcon />} iconPosition="start" label="Return Book Desk" />
+          )}
           <Tab icon={<HistoryIcon />} iconPosition="start" label="Transaction Log" />
-          <Tab icon={<PersonIcon />} iconPosition="start" label="Student History" />
+          <Tab icon={<PersonIcon />} iconPosition="start" label="My Borrow History" />
           <Tab
             icon={
               <Badge badgeContent={stats?.totalFinesPending ? `₹${stats.totalFinesPending}` : 0} color="error">
@@ -659,7 +669,9 @@ export const LibraryPage: React.FC = () => {
             iconPosition="start"
             label="Library Fines"
           />
-          <Tab icon={<PrintIcon />} iconPosition="start" label="Reports & Labels" />
+          {user?.role !== 'STUDENT' && (
+            <Tab icon={<PrintIcon />} iconPosition="start" label="Reports & Labels" />
+          )}
         </Tabs>
 
         {/* TAB 0: BOOKS CATALOG */}

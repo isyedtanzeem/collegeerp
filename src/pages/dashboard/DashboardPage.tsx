@@ -27,6 +27,7 @@ import { RoleAnalyticsCharts } from '../../components/dashboard/RoleAnalyticsCha
 import { RoleStatisticsPanel } from '../../components/dashboard/RoleStatisticsPanel.js';
 import { RoleQuickActions } from '../../components/dashboard/RoleQuickActions.js';
 import { RecentActivityStream } from '../../components/dashboard/RecentActivityStream.js';
+import { StudentDashboard } from '../../components/dashboard/StudentDashboard.js';
 
 export const DashboardPage: React.FC = () => {
   const { user, token } = useAuth();
@@ -58,6 +59,11 @@ export const DashboardPage: React.FC = () => {
 
   if (isLoading || !user) {
     return <LoadingSpinner message="Fetching live ERP dashboard metrics..." />;
+  }
+
+  // Render dedicated Student Dashboard view for STUDENT role
+  if (user.role === 'STUDENT') {
+    return <StudentDashboard notices={notices} />;
   }
 
   const roleTitle = user.role.replace('_', ' ');

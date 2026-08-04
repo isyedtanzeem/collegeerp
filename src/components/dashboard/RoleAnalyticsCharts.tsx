@@ -48,7 +48,7 @@ export const RoleAnalyticsCharts: React.FC<RoleAnalyticsChartsProps> = ({ role, 
                 {role === 'HOD' && 'Course Performance & Pass Percentage'}
                 {role === 'FACULTY' && 'Grade Distribution Breakdown'}
                 {role === 'STUDENT' && 'Subject Attendance & Internal Marks'}
-                {role === 'ACCOUNTANT' && 'Fee Revenue Categories ($)'}
+                {role === 'ACCOUNTANT' && 'Fee Revenue Categories (₹)'}
                 {role === 'LIBRARIAN' && 'Book Titles & Currently Issued'}
               </Typography>
               <Typography variant="caption" color="text.secondary">
@@ -78,7 +78,7 @@ export const RoleAnalyticsCharts: React.FC<RoleAnalyticsChartsProps> = ({ role, 
                   {barData[0]?.passRate !== undefined && <Bar dataKey="passRate" name="Pass Rate %" fill="#0284c7" radius={[4, 4, 0, 0]} />}
                   {barData[0]?.attendance !== undefined && <Bar dataKey="attendance" name="Attendance %" fill="#10b981" radius={[4, 4, 0, 0]} />}
                   {barData[0]?.marks !== undefined && <Bar dataKey="marks" name="Marks %" fill="#f59e0b" radius={[4, 4, 0, 0]} />}
-                  {barData[0]?.amount !== undefined && <Bar dataKey="amount" name="Amount ($)" fill="#10b981" radius={[4, 4, 0, 0]} />}
+                  {barData[0]?.amount !== undefined && <Bar dataKey="amount" name="Amount (₹)" fill="#10b981" radius={[4, 4, 0, 0]} />}
                   {barData[0]?.titles !== undefined && <Bar dataKey="titles" name="Book Titles" fill="#0284c7" radius={[4, 4, 0, 0]} />}
                   {barData[0]?.issued !== undefined && <Bar dataKey="issued" name="Issued Copies" fill="#f59e0b" radius={[4, 4, 0, 0]} />}
                 </BarChart>
@@ -130,7 +130,7 @@ export const RoleAnalyticsCharts: React.FC<RoleAnalyticsChartsProps> = ({ role, 
                     <Line type="monotone" dataKey="cgpa" name="CGPA" stroke="#8b5cf6" strokeWidth={2.5} dot={{ r: 4 }} />
                   )}
                   {trendData[0]?.collected !== undefined && (
-                    <Line type="monotone" dataKey="collected" name="Fee Collected ($)" stroke="#10b981" strokeWidth={2.5} dot={{ r: 4 }} />
+                    <Line type="monotone" dataKey="collected" name="Fee Collected (₹)" stroke="#10b981" strokeWidth={2.5} dot={{ r: 4 }} />
                   )}
                   {trendData[0]?.issued !== undefined && (
                     <Line type="monotone" dataKey="issued" name="Books Issued" stroke="#0284c7" strokeWidth={2.5} dot={{ r: 4 }} />

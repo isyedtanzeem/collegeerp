@@ -23,6 +23,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import StorageIcon from '@mui/icons-material/Storage';
 import { useNavigate } from 'react-router-dom';
+import { Logo } from './Logo';
 import { useAuth } from '../../context/AuthContext.js';
 import { UserRole } from '../../types/index.js';
 
@@ -134,18 +135,8 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={onToggleSidebar} sx={{ mr: 1 }}>
             <MenuIcon />
           </IconButton>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }} onClick={() => navigate('/dashboard')}>
-            <Avatar sx={{ bgcolor: 'primary.main', width: 36, height: 36 }}>
-              <SchoolIcon fontSize="small" />
-            </Avatar>
-            <Box>
-              <Typography variant="h6" color="text.primary" sx={{ lineHeight: 1.2, fontSize: '1.1rem', fontWeight: 700 }}>
-                Astra College ERP
-              </Typography>
-              <Typography variant="caption" color="text.secondary" sx={{ display: { xs: 'none', sm: 'block' } }}>
-                MERN Institutional Suite
-              </Typography>
-            </Box>
+          <Box sx={{ cursor: 'pointer' }} onClick={() => navigate('/dashboard')}>
+            <Logo size="small" />
           </Box>
 
           {/* Live DB Connection Badge */}

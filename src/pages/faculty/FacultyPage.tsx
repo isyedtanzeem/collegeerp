@@ -456,7 +456,7 @@ export const FacultyPage: React.FC = () => {
                   TOTAL MONTHLY PAYROLL
                 </Typography>
                 <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                  ${totalSalary.toLocaleString()}
+                  ₹{totalSalary.toLocaleString()}
                 </Typography>
               </Box>
             </CardContent>
@@ -733,7 +733,7 @@ export const FacultyPage: React.FC = () => {
 
                   <TableCell>
                     <Typography variant="body2" sx={{ fontWeight: 800, color: 'success.main' }}>
-                      ${f.salary?.toLocaleString() || '0'}
+                      ₹{f.salary?.toLocaleString() || '0'}
                     </Typography>
                   </TableCell>
 
@@ -909,7 +909,7 @@ export const FacultyPage: React.FC = () => {
                         📞 {f.phone}
                       </Typography>
                       <Typography variant="caption" sx={{ fontWeight: 800, color: 'success.main', display: 'block', mt: 0.5 }}>
-                        Salary: ${f.salary?.toLocaleString()} / mo
+                        Salary: ₹{f.salary?.toLocaleString()} / mo
                       </Typography>
                     </Box>
                   </CardContent>
@@ -1234,7 +1234,7 @@ export const FacultyPage: React.FC = () => {
                   <TextField
                     fullWidth
                     type="number"
-                    label="Monthly Salary ($)"
+                    label="Monthly Salary (₹)"
                     value={formData.salary}
                     onChange={(e) => setFormData({ ...formData, salary: Number(e.target.value) })}
                     error={Boolean(formErrors.salary)}
@@ -1398,7 +1398,7 @@ export const FacultyPage: React.FC = () => {
                         Monthly Salary
                       </Typography>
                       <Typography variant="body2" sx={{ fontWeight: 800, color: 'success.main' }}>
-                        ${viewingFaculty.salary?.toLocaleString()}
+                        ₹{viewingFaculty.salary?.toLocaleString()}
                       </Typography>
                     </Grid>
                   </Grid>

@@ -240,7 +240,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth }) 
           Active Role: <strong>{userRole.replace('_', ' ')}</strong>
         </Typography>
         <Typography variant="caption" color="text.secondary" align="center" sx={{ display: 'block', fontSize: '0.7rem' }}>
-          College ERP v2.6.0
+          Community College ERP v2.6.0
         </Typography>
       </Box>
     </Box>

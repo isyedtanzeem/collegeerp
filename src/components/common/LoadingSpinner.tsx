@@ -6,7 +6,7 @@ interface LoadingSpinnerProps {
   fullPage?: boolean;
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ message = 'Loading College ERP...', fullPage = false }) => {
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ message = 'Loading Community College ERP...', fullPage = false }) => {
   return (
     <Box
       sx={{

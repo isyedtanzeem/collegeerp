@@ -1,6 +1,6 @@
 {
-  "name": "College ERP System",
-  "description": "Full-stack College ERP application with Role-based access for Super Admin, Principal, HOD, Faculty, Student, Accountant, and Librarian.",
+  "name": "Community College ERP System",
+  "description": "Full-stack Community College ERP application with Role-based access for Super Admin, Principal, HOD, Faculty, Student, Accountant, and Librarian.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

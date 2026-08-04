@@ -21,6 +21,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.js';
 import { UserRole } from '../../types/index.js';
+import { Logo } from '../../components/common/Logo';
 
 interface LoginFormInputs {
   email: string;
@@ -78,14 +79,11 @@ export const LoginPage: React.FC = () => {
   return (
     <Box sx={{ width: '100%' }}>
       {/* Brand Header */}
-      <Box sx={{ textAlign: 'center', mb: 3 }}>
-        <Avatar sx={{ bgcolor: 'primary.main', width: 56, height: 56, mx: 'auto', mb: 1.5 }}>
-          <SchoolIcon fontSize="large" />
-        </Avatar>
-        <Typography variant="h5" color="text.primary" sx={{ fontWeight: 700 }}>
-          Astra College ERP
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
+        <Box sx={{ mb: 1.5 }}>
+          <Logo size="large" />
+        </Box>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
           Sign in to access your institutional portal
         </Typography>
       </Box>

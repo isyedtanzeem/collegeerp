@@ -1558,7 +1558,7 @@ export const seedDatabase = async (): Promise<void> => {
         },
         {
           title: 'Mega Campus Placement Drive by TechCorp Global Systems',
-          content: 'Training & Placement Cell is proud to announce an On-Campus Placement Drive by TechCorp Global Systems for B.Tech CS, IT & ECE 2026 passing batch. Position: Software Development Engineer (SDE-1). CTC Package: $18,000 / annum. Eligible CPI: 7.0 and above with no active backlogs. Interested candidates must register before May 10, 2026.',
+          content: 'Training & Placement Cell is proud to announce an On-Campus Placement Drive by TechCorp Global Systems for B.Tech CS, IT & ECE 2026 passing batch. Position: Software Development Engineer (SDE-1). CTC Package: ₹12,00,000 / annum. Eligible CPI: 7.0 and above with no active backlogs. Interested candidates must register before May 10, 2026.',
           category: 'PLACEMENT',
           postType: 'STUDENT_NOTICE',
           priority: 'URGENT',

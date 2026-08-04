@@ -97,7 +97,7 @@ export const DashboardPage: React.FC = () => {
                 Welcome back, {user.name}
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.85, maxWidth: 650 }}>
-                {user.department ? `Department of ${user.department}` : 'Astra College Institutional Management System'}
+                {user.department ? `Department of ${user.department}` : 'Community College Institutional Management System'}
                 {user.designation ? ` • ${user.designation}` : ''}
               </Typography>
             </Box>

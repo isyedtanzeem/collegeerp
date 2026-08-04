@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="cc-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="cc-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#cc-grad)"/>
+  <!-- Graduation Cap & Open Book Logo -->
+  <path d="M32 12 L50 21 L32 30 L14 21 Z" fill="url(#cc-accent)"/>
+  <path d="M44 25.5 V33.5 C44 33.5 38 37 32 37 C26 37 20 33.5 20 33.5 V25.5" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M48 23 V36" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="48" cy="37.5" r="2" fill="#f59e0b"/>
+  <!-- Open Book Base -->
+  <path d="M18 42 C24 40 30 41 32 44 C34 41 40 40 46 42 V49 C40 47 34 48 32 50 C30 48 24 47 18 49 Z" fill="#ffffff" opacity="0.95"/>
+</svg>

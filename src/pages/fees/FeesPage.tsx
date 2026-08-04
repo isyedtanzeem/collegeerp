@@ -459,7 +459,7 @@ export const FeesPage: React.FC = () => {
                       </Avatar>
                     </Box>
                     <Typography variant="h4" sx={{ fontWeight: 900 }}>
-                      ${stats.totalCollectable.toLocaleString()}
+                      ₹{stats.totalCollectable.toLocaleString()}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
                       Across {stats.totalRecords} fee assignments
@@ -481,7 +481,7 @@ export const FeesPage: React.FC = () => {
                       </Avatar>
                     </Box>
                     <Typography variant="h4" sx={{ fontWeight: 900, color: 'success.main' }}>
-                      ${stats.totalCollected.toLocaleString()}
+                      ₹{stats.totalCollected.toLocaleString()}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
                       {stats.statusCounts.PAID} Fully Paid records
@@ -503,7 +503,7 @@ export const FeesPage: React.FC = () => {
                       </Avatar>
                     </Box>
                     <Typography variant="h4" sx={{ fontWeight: 900, color: 'warning.main' }}>
-                      ${stats.totalPending.toLocaleString()}
+                      ₹{stats.totalPending.toLocaleString()}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
                       {stats.statusCounts.PENDING + stats.statusCounts.PARTIAL} Pending / Partial
@@ -525,10 +525,10 @@ export const FeesPage: React.FC = () => {
                       </Avatar>
                     </Box>
                     <Typography variant="h4" sx={{ fontWeight: 900, color: 'info.main' }}>
-                      ${stats.totalScholarships.toLocaleString()}
+                      ₹{stats.totalScholarships.toLocaleString()}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      Fines Collected: ${stats.totalFines.toLocaleString()}
+                      Fines Collected: ₹{stats.totalFines.toLocaleString()}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -761,32 +761,32 @@ export const FeesPage: React.FC = () => {
 
                           <TableCell>
                             <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                              Base: ${f.baseAmount}
+                              Base: ₹{f.baseAmount}
                             </Typography>
                             {f.fineAmount > 0 && (
                               <Typography variant="caption" color="error.main" sx={{ display: 'block', fontWeight: 700 }}>
-                                + Fine: ${f.fineAmount}
+                                + Fine: ₹{f.fineAmount}
                               </Typography>
                             )}
                             {f.scholarshipAmount > 0 && (
                               <Typography variant="caption" color="success.main" sx={{ display: 'block', fontWeight: 700 }}>
-                                - Schol: ${f.scholarshipAmount}
+                                - Schol: ₹{f.scholarshipAmount}
                               </Typography>
                             )}
                           </TableCell>
 
                           <TableCell>
                             <Typography variant="body2" sx={{ fontWeight: 900 }}>
-                              ${f.totalPayable}
+                              ₹{f.totalPayable}
                             </Typography>
                           </TableCell>
 
                           <TableCell>
                             <Typography variant="body2" sx={{ fontWeight: 800, color: 'success.main' }}>
-                              Paid: ${f.paidAmount}
+                              Paid: ₹{f.paidAmount}
                             </Typography>
                             <Typography variant="caption" color={f.pendingAmount > 0 ? 'error.main' : 'text.secondary'} sx={{ fontWeight: 800, display: 'block' }}>
-                              Pending: ${f.pendingAmount}
+                              Pending: ₹{f.pendingAmount}
                             </Typography>
                           </TableCell>
 
@@ -926,7 +926,7 @@ export const FeesPage: React.FC = () => {
                     ) : (
                       studentFeeOptions.map((f) => (
                         <MenuItem key={f._id} value={f._id}>
-                          {f.title} ({f.category}) — Pending: ${f.pendingAmount} (Due: {f.dueDate})
+                          {f.title} ({f.category}) — Pending: ₹{f.pendingAmount} (Due: {f.dueDate})
                         </MenuItem>
                       ))
                     )}
@@ -936,7 +936,7 @@ export const FeesPage: React.FC = () => {
 
               <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
-                  label="Payment Amount ($)"
+                  label="Payment Amount (₹)"
                   type="number"
                   fullWidth
                   size="small"
@@ -1095,7 +1095,7 @@ export const FeesPage: React.FC = () => {
                         </TableCell>
 
                         <TableCell sx={{ fontWeight: 900, color: 'success.main' }}>
-                          ${p.amountPaid}
+                          ₹{p.amountPaid}
                         </TableCell>
 
                         <TableCell>
@@ -1190,7 +1190,7 @@ export const FeesPage: React.FC = () => {
 
               <Grid size={{ xs: 12, sm: 4 }}>
                 <TextField
-                  label="Base Fee Amount ($)"
+                  label="Base Fee Amount (₹)"
                   type="number"
                   fullWidth
                   size="small"
@@ -1309,7 +1309,7 @@ export const FeesPage: React.FC = () => {
 
             <Grid size={{ xs: 12, sm: 4 }}>
               <TextField
-                label="Base Amount ($)"
+                label="Base Amount (₹)"
                 type="number"
                 fullWidth
                 size="small"
@@ -1320,7 +1320,7 @@ export const FeesPage: React.FC = () => {
 
             <Grid size={{ xs: 12, sm: 4 }}>
               <TextField
-                label="Late Fine ($)"
+                label="Late Fine (₹)"
                 type="number"
                 fullWidth
                 size="small"
@@ -1331,7 +1331,7 @@ export const FeesPage: React.FC = () => {
 
             <Grid size={{ xs: 12, sm: 4 }}>
               <TextField
-                label="Scholarship Waiver ($)"
+                label="Scholarship Waiver (₹)"
                 type="number"
                 fullWidth
                 size="small"
@@ -1374,7 +1374,7 @@ export const FeesPage: React.FC = () => {
           </Typography>
 
           <TextField
-            label="Scholarship Discount Amount ($)"
+            label="Scholarship Discount Amount (₹)"
             type="number"
             fullWidth
             size="small"
@@ -1412,7 +1412,7 @@ export const FeesPage: React.FC = () => {
           </Typography>
 
           <TextField
-            label="Late Fine Penalty Amount ($)"
+            label="Late Fine Penalty Amount (₹)"
             type="number"
             fullWidth
             size="small"
@@ -1544,10 +1544,10 @@ export const FeesPage: React.FC = () => {
                     <TableRow>
                       <TableCell sx={{ fontWeight: 700 }}>{receiptData.feeBreakdown.title}</TableCell>
                       <TableCell>{receiptData.feeBreakdown.category}</TableCell>
-                      <TableCell align="right">${receiptData.feeBreakdown.baseAmount}</TableCell>
-                      <TableCell align="right" sx={{ color: 'error.main' }}>+${receiptData.feeBreakdown.fineAmount}</TableCell>
-                      <TableCell align="right" sx={{ color: 'success.main' }}>-${receiptData.feeBreakdown.scholarshipAmount}</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 800 }}>${receiptData.feeBreakdown.totalPayable}</TableCell>
+                      <TableCell align="right">₹{receiptData.feeBreakdown.baseAmount}</TableCell>
+                      <TableCell align="right" sx={{ color: 'error.main' }}>+₹{receiptData.feeBreakdown.fineAmount}</TableCell>
+                      <TableCell align="right" sx={{ color: 'success.main' }}>-₹{receiptData.feeBreakdown.scholarshipAmount}</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 800 }}>₹{receiptData.feeBreakdown.totalPayable}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -1557,10 +1557,10 @@ export const FeesPage: React.FC = () => {
               <Grid container spacing={2} sx={{ alignItems: 'center', mb: 3, p: 2, bgcolor: 'success.50', borderRadius: 2 }}>
                 <Grid size={{ xs: 6 }}>
                   <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'success.main' }}>
-                    AMOUNT RECEIVED: ${receiptData.receipt.amountPaid}
+                    AMOUNT RECEIVED: ₹{receiptData.receipt.amountPaid}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
-                    Remaining Balance: ${receiptData.feeBreakdown.remainingBalance}
+                    Remaining Balance: ₹{receiptData.feeBreakdown.remainingBalance}
                   </Typography>
                 </Grid>
                 <Grid size={{ xs: 6 }} sx={{ textAlign: 'right' }}>

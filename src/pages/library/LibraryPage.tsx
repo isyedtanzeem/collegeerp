@@ -437,7 +437,7 @@ export const LibraryPage: React.FC = () => {
     setReturnFormData({
       returnDate: todayStr,
       fineAmountOverride: calculatedFine,
-      remarks: calculatedFine > 0 ? `Late return fine calculated ($${calculatedFine})` : 'Returned on time',
+      remarks: calculatedFine > 0 ? `Late return fine calculated (₹${calculatedFine})` : 'Returned on time',
     });
     setOpenReturnDialog(true);
   };
@@ -623,10 +623,10 @@ export const LibraryPage: React.FC = () => {
                 </Avatar>
               </Stack>
               <Typography variant="h4" sx={{ fontWeight: 800, color: 'text.primary' }}>
-                ${stats?.totalFinesCollected || 0}
+                ₹{stats?.totalFinesCollected || 0}
               </Typography>
               <Typography variant="caption" sx={{ color: 'error.main', fontWeight: 600 }}>
-                ${stats?.totalFinesPending || 0} Pending Clearance
+                ₹{stats?.totalFinesPending || 0} Pending Clearance
               </Typography>
             </CardContent>
           </Card>
@@ -652,7 +652,7 @@ export const LibraryPage: React.FC = () => {
           <Tab icon={<PersonIcon />} iconPosition="start" label="Student History" />
           <Tab
             icon={
-              <Badge badgeContent={stats?.totalFinesPending ? `$${stats.totalFinesPending}` : 0} color="error">
+              <Badge badgeContent={stats?.totalFinesPending ? `₹${stats.totalFinesPending}` : 0} color="error">
                 <LocalAtmIcon />
               </Badge>
             }
@@ -901,7 +901,7 @@ export const LibraryPage: React.FC = () => {
                               Late Fine Rate
                             </Typography>
                             <Typography variant="body2" color="error.main" sx={{ fontWeight: 700 }}>
-                              ${cat.finePerDay} / Day
+                              ₹{cat.finePerDay} / Day
                             </Typography>
                           </Grid>
                         </Grid>
@@ -1233,7 +1233,7 @@ export const LibraryPage: React.FC = () => {
                         <TableCell>
                           {iss.fineAmount > 0 ? (
                             <Chip
-                              label={`$${iss.fineAmount} (${iss.fineStatus})`}
+                              label={`₹${iss.fineAmount} (${iss.fineStatus})`}
                               size="small"
                               color={iss.fineStatus === 'PAID' ? 'success' : 'warning'}
                             />
@@ -1329,7 +1329,7 @@ export const LibraryPage: React.FC = () => {
 
                           <Box sx={{ textAlign: 'center' }}>
                             <Typography variant="h5" sx={{ fontWeight: 800, color: 'error.main' }}>
-                              ${studentHistoryData.summary.totalFinesPending}
+                              ₹{studentHistoryData.summary.totalFinesPending}
                             </Typography>
                             <Typography variant="caption">Pending Fines</Typography>
                           </Box>
@@ -1375,7 +1375,7 @@ export const LibraryPage: React.FC = () => {
                                 color={iss.status === 'RETURNED' ? 'success' : 'warning'}
                               />
                             </TableCell>
-                            <TableCell>${iss.fineAmount}</TableCell>
+                            <TableCell>₹{iss.fineAmount}</TableCell>
                           </TableRow>
                         ))
                       )}
@@ -1456,7 +1456,7 @@ export const LibraryPage: React.FC = () => {
                         </TableCell>
                         <TableCell>
                           <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'error.main' }}>
-                            ${f.fineAmount}
+                            ₹{f.fineAmount}
                           </Typography>
                         </TableCell>
                         <TableCell>
@@ -1660,7 +1660,7 @@ export const LibraryPage: React.FC = () => {
               <TextField
                 fullWidth
                 type="number"
-                label="Price ($)"
+                label="Price (₹)"
                 value={bookFormData.price}
                 onChange={(e) => setBookFormData({ ...bookFormData, price: Number(e.target.value) })}
               />
@@ -1728,7 +1728,7 @@ export const LibraryPage: React.FC = () => {
                 <TextField
                   fullWidth
                   type="number"
-                  label="Fine Per Day ($)"
+                  label="Fine Per Day (₹)"
                   value={categoryFormData.finePerDay}
                   onChange={(e) => setCategoryFormData({ ...categoryFormData, finePerDay: Number(e.target.value) })}
                 />
@@ -1823,7 +1823,7 @@ export const LibraryPage: React.FC = () => {
               <TextField
                 fullWidth
                 type="number"
-                label="Late Return Fine ($)"
+                label="Late Return Fine (₹)"
                 value={returnFormData.fineAmountOverride}
                 onChange={(e) => setReturnFormData({ ...returnFormData, fineAmountOverride: Number(e.target.value) })}
                 helperText="Auto-calculated fine. Override if necessary or waive to 0."

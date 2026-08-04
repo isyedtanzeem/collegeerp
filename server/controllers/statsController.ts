@@ -108,7 +108,7 @@ export const getDashboardStats = async (req: AuthRequest, res: Response): Promis
           { label: 'Research Papers Published', value: '34' },
           { label: 'Campus Placement Rate', value: '88.5%' },
           { label: 'NIRF Ranking Band', value: '101 - 150' },
-          { label: 'Active R&D Grants', value: '$420,000' },
+          { label: 'Active R&D Grants', value: '₹4,20,00,000' },
         ],
         recentActivities: [
           { title: 'CSE Department Monthly Audit Submitted', time: '1 hour ago', user: 'HOD Computer Science', category: 'ACADEMICS' },
@@ -214,7 +214,7 @@ export const getDashboardStats = async (req: AuthRequest, res: Response): Promis
           { label: 'Enrolled Courses', value: 6, change: 'Spring Semester 2026', color: 'primary' },
           { label: 'Overall Attendance', value: '88.5%', change: 'Target: >80%', color: 'success' },
           { label: 'Current CGPA / Grade', value: '3.82 / 4.0', change: 'Top 5% in class', color: 'info' },
-          { label: 'Pending Fee Balance', value: '$0.00', change: 'All Dues Clear', color: 'secondary' },
+          { label: 'Pending Fee Balance', value: '₹0.00', change: 'All Dues Clear', color: 'secondary' },
         ],
         charts: {
           departmentEnrollment: [
@@ -239,7 +239,7 @@ export const getDashboardStats = async (req: AuthRequest, res: Response): Promis
         ],
         recentActivities: [
           { title: 'Submitted Assignment #3 in Web Tech', time: '1 hour ago', user: 'You', category: 'SUBMISSION' },
-          { title: 'Semester Fee Payment Confirmed ($1,250)', time: '2 days ago', user: 'Accounts Office', category: 'FINANCE' },
+          { title: 'Semester Fee Payment Confirmed (₹45,000)', time: '2 days ago', user: 'Accounts Office', category: 'FINANCE' },
           { title: 'Issued "Clean Code" Book from Library', time: '4 days ago', user: 'Central Library', category: 'LIBRARY' },
           { title: 'Mid-term Result Published: 94% in DS', time: '1 week ago', user: 'Exam Cell', category: 'RESULT' },
         ],
@@ -253,8 +253,8 @@ export const getDashboardStats = async (req: AuthRequest, res: Response): Promis
 
       ACCOUNTANT: {
         cards: [
-          { label: 'Total Fees Collected', value: `$${totalCollectedAmount.toLocaleString()}`, change: '+14% YTD', color: 'success' },
-          { label: 'Pending Dues Balance', value: `$${totalPendingAmount.toLocaleString()}`, change: '45 Accounts Overdue', color: 'error' },
+          { label: 'Total Fees Collected', value: `₹${totalCollectedAmount.toLocaleString()}`, change: '+14% YTD', color: 'success' },
+          { label: 'Pending Dues Balance', value: `₹${totalPendingAmount.toLocaleString()}`, change: '45 Accounts Overdue', color: 'error' },
           { label: 'Daily Receipts Collected', value: 42, change: 'Today', color: 'primary' },
           { label: 'Invoices Generated', value: 380, change: 'Spring Term', color: 'warning' },
         ],
@@ -275,12 +275,12 @@ export const getDashboardStats = async (req: AuthRequest, res: Response): Promis
         },
         statistics: [
           { label: 'On-Time Payment Compliance', value: '82.4%' },
-          { label: 'Scholarship Grants Approved', value: '$120,000' },
+          { label: 'Scholarship Grants Approved', value: '₹12,00,000' },
           { label: 'Accounts Under Notice', value: '18' },
           { label: 'Collection Efficiency Rate', value: '91.2%' },
         ],
         recentActivities: [
-          { title: 'Issued Tuition Fee Receipt #8492 ($1,250)', time: '15 mins ago', user: 'Counter #1', category: 'RECEIPT' },
+          { title: 'Issued Tuition Fee Receipt #8492 (₹45,000)', time: '15 mins ago', user: 'Counter #1', category: 'RECEIPT' },
           { title: 'Generated Automated Late Fee Reminders', time: '2 hours ago', user: 'Billing Service', category: 'INVOICE' },
           { title: 'Monthly Staff Salary Payroll Processed', time: 'Yesterday', user: 'Chief Accountant', category: 'PAYROLL' },
           { title: 'External Financial Audit Verified', time: '3 days ago', user: 'Audit Team', category: 'AUDIT' },
@@ -319,7 +319,7 @@ export const getDashboardStats = async (req: AuthRequest, res: Response): Promis
         statistics: [
           { label: 'Digital E-Books Collection', value: '12,500+' },
           { label: 'Daily Average Visitors', value: '310' },
-          { label: 'Library Fine Collected', value: '$450' },
+          { label: 'Library Fine Collected', value: '₹4,500' },
           { label: 'Active Library Memberships', value: '1,150' },
         ],
         recentActivities: [

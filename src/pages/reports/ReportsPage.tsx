@@ -149,7 +149,7 @@ export const ReportsPage: React.FC = () => {
                     FEE COLLECTION
                   </Typography>
                   <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: '#059669' }}>
-                    ${summary.totalFeeCollected?.toLocaleString()}
+                    ₹{summary.totalFeeCollected?.toLocaleString()}
                   </Typography>
                 </Box>
                 <AccountBalanceWalletIcon sx={{ fontSize: 36, color: '#059669' }} />

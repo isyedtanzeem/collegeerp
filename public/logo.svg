@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 60" width="280" height="60">
+  <defs>
+    <linearGradient id="logo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="logo-gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+  </defs>
+  <!-- Icon Emblem -->
+  <g transform="translate(4, 4)">
+    <rect width="52" height="52" rx="14" fill="url(#logo-bg)"/>
+    <path d="M26 10 L41 17.5 L26 25 L11 17.5 Z" fill="url(#logo-gold)"/>
+    <path d="M35 21 V28 C35 28 30 31 26 31 C22 31 17 28 17 28 V21" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M39 19 V30" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="39" cy="31.5" r="1.5" fill="#fbbf24"/>
+    <path d="M15 36 C20 34 24 35 26 37 C28 35 32 34 37 36 V42 C32 40 28 41 26 43 C24 41 20 40 15 42 Z" fill="#ffffff" opacity="0.95"/>
+  </g>
+  <!-- Text Brand -->
+  <text x="68" y="28" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="800" font-size="20" fill="#0f172a" letter-spacing="-0.3">COMMUNITY</text>
+  <text x="68" y="47" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="700" font-size="16" fill="#0284c7" letter-spacing="1.5">COLLEGE ERP</text>
+</svg>

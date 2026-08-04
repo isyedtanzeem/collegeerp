@@ -9,6 +9,7 @@ import {
   Box,
   Typography,
   Divider,
+  Tooltip,
 } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
@@ -37,6 +38,7 @@ interface SidebarProps {
   open: boolean;
   onClose: () => void;
   drawerWidth: number;
+  collapsed?: boolean;
 }
 
 interface NavItem {
@@ -165,7 +167,7 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
-export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth, collapsed = false }) => {
   const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -177,47 +179,56 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth }) 
     return item.allowedRoles.includes(userRole);
   });
 
-  const content = (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', pt: 2 }}>
-      <Box sx={{ px: 3, pb: 2 }}>
-        <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 700, letterSpacing: 1 }}>
-          Navigation Menu
+  const renderContent = (isCollapsedMode: boolean) => (
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', pt: 2, overflowX: 'hidden' }}>
+      <Box sx={{ px: isCollapsedMode ? 1.5 : 3, pb: 2, textAlign: isCollapsedMode ? 'center' : 'left' }}>
+        <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 700, letterSpacing: 1, fontSize: isCollapsedMode ? '0.65rem' : '0.75rem' }}>
+          {isCollapsedMode ? 'MENU' : 'Navigation Menu'}
         </Typography>
       </Box>
 
       <Divider sx={{ mb: 1 }} />
 
-      <List sx={{ px: 1.5, flexGrow: 1 }}>
+      <List sx={{ px: 1, flexGrow: 1 }}>
         {visibleNavItems.map((item) => {
           const isSelected = location.pathname === item.path;
 
-          return (
-            <ListItem key={item.title} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                selected={isSelected}
-                onClick={() => {
-                  navigate(item.path);
-                  if (onClose) onClose();
-                }}
-                sx={{
-                  borderRadius: 2,
-                  py: 1,
-                  px: 2,
-                  '&.Mui-selected': {
-                    bgcolor: 'primary.main',
+          const button = (
+            <ListItemButton
+              selected={isSelected}
+              onClick={() => {
+                navigate(item.path);
+                if (onClose) onClose();
+              }}
+              sx={{
+                borderRadius: 2,
+                py: 1.2,
+                px: isCollapsedMode ? 1.2 : 2,
+                justifyContent: isCollapsedMode ? 'center' : 'initial',
+                minHeight: 44,
+                '&.Mui-selected': {
+                  bgcolor: 'primary.main',
+                  color: 'primary.contrastText',
+                  '& .MuiListItemIcon-root': {
                     color: 'primary.contrastText',
-                    '& .MuiListItemIcon-root': {
-                      color: 'primary.contrastText',
-                    },
-                    '&:hover': {
-                      bgcolor: 'primary.dark',
-                    },
                   },
+                  '&:hover': {
+                    bgcolor: 'primary.dark',
+                  },
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: isCollapsedMode ? 0 : 40,
+                  mr: isCollapsedMode ? 0 : 0.5,
+                  justifyContent: 'center',
+                  color: isSelected ? 'inherit' : 'text.secondary',
                 }}
               >
-                <ListItemIcon sx={{ minWidth: 40, color: isSelected ? 'inherit' : 'text.secondary' }}>
-                  {item.icon}
-                </ListItemIcon>
+                {item.icon}
+              </ListItemIcon>
+              {!isCollapsedMode && (
                 <ListItemText
                   primary={item.title}
                   slotProps={{
@@ -225,23 +236,46 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth }) 
                       sx: {
                         fontSize: '0.9rem',
                         fontWeight: isSelected ? 700 : 500,
+                        whiteSpace: 'nowrap',
                       },
                     },
                   }}
                 />
-              </ListItemButton>
+              )}
+            </ListItemButton>
+          );
+
+          return (
+            <ListItem key={item.title} disablePadding sx={{ mb: 0.5 }}>
+              {isCollapsedMode ? (
+                <Tooltip title={item.title} placement="right" arrow>
+                  <Box sx={{ width: '100%' }}>{button}</Box>
+                </Tooltip>
+              ) : (
+                button
+              )}
             </ListItem>
           );
         })}
       </List>
 
-      <Box sx={{ p: 2, bgcolor: 'background.default', borderTop: '1px solid #e2e8f0', mt: 'auto' }}>
-        <Typography variant="caption" color="text.secondary" align="center" sx={{ display: 'block' }}>
-          Active Role: <strong>{userRole.replace('_', ' ')}</strong>
-        </Typography>
-        <Typography variant="caption" color="text.secondary" align="center" sx={{ display: 'block', fontSize: '0.7rem' }}>
-          Community College ERP v2.6.0
-        </Typography>
+      <Box sx={{ p: isCollapsedMode ? 1.5 : 2, bgcolor: 'background.default', borderTop: '1px solid #e2e8f0', mt: 'auto', textAlign: 'center' }}>
+        {isCollapsedMode ? (
+          <Tooltip title={`Active Role: ${userRole.replace('_', ' ')}`} placement="right" arrow>
+            <Typography variant="caption" sx={{ fontWeight: 800, color: 'primary.main', display: 'block' }}>
+              {userRole.substring(0, 3)}
+            </Typography>
+          </Tooltip>
+        ) : (
+          <>
+            <Typography variant="caption" color="text.secondary" align="center" sx={{ display: 'block' }}>
+              Active Role: <strong>{userRole.replace('_', ' ')}</strong>
+            </Typography>
+            <Typography variant="caption" color="text.secondary" align="center" sx={{ display: 'block', fontSize: '0.7rem' }}>
+              Community College ERP v2.6.0
+            </Typography>
+          </>
+        )}
       </Box>
     </Box>
   );
@@ -259,7 +293,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth }) 
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
         }}
       >
-        {content}
+        {renderContent(false)}
       </Drawer>
 
       {/* Desktop Persistent Drawer */}
@@ -275,11 +309,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth }) 
             borderRight: '1px solid #e2e8f0',
             top: 64,
             height: 'calc(100% - 64px)',
+            overflowX: 'hidden',
+            transition: (theme) =>
+              theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
           },
         }}
         open
       >
-        {content}
+        {renderContent(collapsed)}
       </Drawer>
     </>
   );

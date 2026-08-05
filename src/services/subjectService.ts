@@ -16,6 +16,7 @@ export const subjectService = {
   async getSubjects(params?: {
     search?: string;
     department?: string;
+    course?: string;
     semester?: string | number;
     status?: string;
     type?: string;

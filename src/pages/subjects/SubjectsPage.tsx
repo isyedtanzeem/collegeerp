@@ -51,10 +51,11 @@ import ScoreIcon from '@mui/icons-material/Score';
 import SchoolIcon from '@mui/icons-material/School';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
-import { Subject, User, Department as DeptType } from '../../types/index.js';
+import { Subject, User, Department as DeptType, Course } from '../../types/index.js';
 import { subjectService } from '../../services/subjectService.js';
 import { userService } from '../../services/userService.js';
 import { departmentService } from '../../services/departmentService.js';
+import { courseService } from '../../services/courseService.js';
 import { useAuth } from '../../context/AuthContext.js';
 
 const SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -75,6 +76,7 @@ export const SubjectsPage: React.FC = () => {
   // Filters
   const [search, setSearch] = useState<string>('');
   const [selectedDept, setSelectedDept] = useState<string>('ALL');
+  const [selectedCourse, setSelectedCourse] = useState<string>('ALL');
   const [selectedSemester, setSelectedSemester] = useState<string>('ALL');
   const [selectedType, setSelectedType] = useState<string>('ALL');
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
@@ -83,6 +85,7 @@ export const SubjectsPage: React.FC = () => {
   // Lists for dropdowns
   const [facultyList, setFacultyList] = useState<User[]>([]);
   const [departmentList, setDepartmentList] = useState<DeptType[]>([]);
+  const [courseList, setCourseList] = useState<Course[]>([]);
 
   // Dialogs
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -103,6 +106,7 @@ export const SubjectsPage: React.FC = () => {
     credits: 4,
     semester: 1,
     department: '',
+    course: '',
     facultyName: 'Unassigned',
     type: 'THEORY' as 'THEORY' | 'PRACTICAL' | 'ELECTIVE',
     status: 'ACTIVE' as 'ACTIVE' | 'INACTIVE',
@@ -125,12 +129,13 @@ export const SubjectsPage: React.FC = () => {
     }
   }, [user?.role, user?.department]);
 
-  // Fetch Dropdown data (Faculties & Departments)
+  // Fetch Dropdown data (Faculties, Departments & Courses)
   const fetchDropdownData = useCallback(async () => {
     try {
-      const [facRes, deptRes] = await Promise.all([
+      const [facRes, deptRes, courseRes] = await Promise.all([
         userService.getUsers({ role: 'FACULTY' }),
         departmentService.getDepartments(),
+        courseService.getCourses({ limit: 100 }),
       ]);
       if (facRes.success && facRes.users) {
         setFacultyList(facRes.users);
@@ -141,6 +146,9 @@ export const SubjectsPage: React.FC = () => {
         } else {
           setDepartmentList(deptRes.departments);
         }
+      }
+      if (courseRes.success && courseRes.courses) {
+        setCourseList(courseRes.courses);
       }
     } catch (err) {
       console.error('Error fetching dropdown references:', err);
@@ -154,6 +162,7 @@ export const SubjectsPage: React.FC = () => {
       const response = await subjectService.getSubjects({
         search,
         department: selectedDept,
+        course: selectedCourse,
         semester: selectedSemester,
         type: selectedType,
         status: selectedStatus,
@@ -177,7 +186,7 @@ export const SubjectsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [search, selectedDept, selectedSemester, selectedType, selectedStatus, page, rowsPerPage]);
+  }, [search, selectedDept, selectedCourse, selectedSemester, selectedType, selectedStatus, page, rowsPerPage]);
 
   useEffect(() => {
     fetchDropdownData();
@@ -196,6 +205,7 @@ export const SubjectsPage: React.FC = () => {
       credits: 4,
       semester: 1,
       department: departmentList.length > 0 ? departmentList[0].name : 'Computer Science & Engineering',
+      course: courseList.length > 0 ? courseList[0].title : 'B.Tech Computer Science',
       facultyName: 'Unassigned',
       type: 'THEORY',
       status: 'ACTIVE',
@@ -212,6 +222,7 @@ export const SubjectsPage: React.FC = () => {
       credits: subject.credits || 4,
       semester: subject.semester || 1,
       department: subject.department,
+      course: subject.course || (courseList.length > 0 ? courseList[0].title : 'B.Tech Computer Science'),
       facultyName: subject.facultyName || 'Unassigned',
       type: subject.type || 'THEORY',
       status: subject.status || 'ACTIVE',
@@ -226,6 +237,7 @@ export const SubjectsPage: React.FC = () => {
     if (!formData.code.trim()) errors.code = 'Subject code is required (e.g. CS201)';
     if (!formData.name.trim()) errors.name = 'Subject name is required';
     if (!formData.department.trim()) errors.department = 'Department is required';
+    if (!formData.course.trim()) errors.course = 'Course is required';
     if (formData.credits < 1 || formData.credits > 12) errors.credits = 'Credits must be between 1 and 12';
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -499,6 +511,29 @@ export const SubjectsPage: React.FC = () => {
             </FormControl>
           </Grid>
 
+          {/* Course Filter */}
+          <Grid size={{ xs: 6, sm: 3, md: 2 }}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Course</InputLabel>
+              <Select
+                value={selectedCourse}
+                label="Course"
+                onChange={(e) => {
+                  setSelectedCourse(e.target.value);
+                  setPage(0);
+                }}
+                sx={{ borderRadius: 2 }}
+              >
+                <MenuItem value="ALL">All Courses</MenuItem>
+                {courseList.map((c) => (
+                  <MenuItem key={c._id} value={c.title}>
+                    {c.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+
           {/* Semester Filter */}
           <Grid size={{ xs: 6, sm: 3, md: 2 }}>
             <FormControl fullWidth size="small">
@@ -617,6 +652,7 @@ export const SubjectsPage: React.FC = () => {
               <TableRow>
                 <TableCell sx={{ fontWeight: 700 }}>Subject Code</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>Subject Name</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Course</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>Credits</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>Semester</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>Department</TableCell>
@@ -646,6 +682,11 @@ export const SubjectsPage: React.FC = () => {
                     <TableCell>
                       <Typography variant="body2" sx={{ fontWeight: 700, color: 'text.primary' }}>
                         {s.name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" noWrap sx={{ fontWeight: 600, color: 'primary.main', maxWidth: 200 }}>
+                        {s.course || 'General Course'}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -808,6 +849,13 @@ export const SubjectsPage: React.FC = () => {
                       </Typography>
 
                       <Stack spacing={1} sx={{ mb: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <MenuBookIcon fontSize="small" color="primary" />
+                          <Typography variant="body2" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                            {s.course || 'General Course'}
+                          </Typography>
+                        </Box>
+
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <SchoolIcon fontSize="small" color="action" />
                           <Typography variant="body2" color="text.secondary">
@@ -1015,6 +1063,29 @@ export const SubjectsPage: React.FC = () => {
                 </FormControl>
               </Grid>
             </Grid>
+
+            <FormControl fullWidth error={Boolean(formErrors.course)}>
+              <InputLabel>Associated Course *</InputLabel>
+              <Select
+                value={formData.course}
+                label="Associated Course *"
+                onChange={(e) => setFormData({ ...formData, course: e.target.value })}
+              >
+                {courseList.map((c) => (
+                  <MenuItem key={c._id} value={c.title}>
+                    {c.title} ({c.code})
+                  </MenuItem>
+                ))}
+                {!courseList.some((c) => c.title === formData.course) && formData.course && (
+                  <MenuItem value={formData.course}>{formData.course}</MenuItem>
+                )}
+              </Select>
+              {formErrors.course ? (
+                <FormHelperText>{formErrors.course}</FormHelperText>
+              ) : (
+                <FormHelperText>Select the academic course this subject belongs to</FormHelperText>
+              )}
+            </FormControl>
 
             <FormControl fullWidth error={Boolean(formErrors.department)}>
               <InputLabel>Department *</InputLabel>

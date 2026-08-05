@@ -73,6 +73,7 @@ export interface Subject {
   credits: number;
   semester: number;
   department: string;
+  course: string;
   facultyName?: string;
   facultyId?: string;
   type?: 'THEORY' | 'PRACTICAL' | 'ELECTIVE';

@@ -3,11 +3,11 @@ import Subject from '../models/Subject.js';
 import User from '../models/User.js';
 import { AuthRequest } from '../middleware/authMiddleware.js';
 
-// @desc    Get subjects with search, department, semester, status filters & pagination
+// @desc    Get subjects with search, department, course, semester, status filters & pagination
 // @route   GET /api/v1/subjects
 export const getSubjects = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { search, department, semester, status, type, page, limit } = req.query;
+    const { search, department, course, semester, status, type, page, limit } = req.query;
 
     const query: any = {};
 
@@ -18,6 +18,7 @@ export const getSubjects = async (req: AuthRequest, res: Response): Promise<void
         { name: searchRegex },
         { code: searchRegex },
         { department: searchRegex },
+        { course: searchRegex },
         { facultyName: searchRegex },
       ];
     }
@@ -27,6 +28,11 @@ export const getSubjects = async (req: AuthRequest, res: Response): Promise<void
       query.department = req.user.department;
     } else if (department && department !== 'ALL') {
       query.department = department;
+    }
+
+    // Course filter
+    if (course && course !== 'ALL') {
+      query.course = course;
     }
 
     // Semester filter
@@ -99,7 +105,7 @@ export const getSubjectById = async (req: AuthRequest, res: Response): Promise<v
 // @route   POST /api/v1/subjects
 export const createSubject = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { name, code, credits, semester, department, facultyName, facultyId, type, status } = req.body;
+    const { name, code, credits, semester, department, course, facultyName, facultyId, type, status } = req.body;
 
     const finalName = (name || '').trim();
     const finalCode = (code || '').trim().toUpperCase();
@@ -120,6 +126,11 @@ export const createSubject = async (req: AuthRequest, res: Response): Promise<vo
       return;
     }
 
+    if (!course || typeof course !== 'string' || course.trim() === '') {
+      res.status(400).json({ success: false, message: 'Course is required' });
+      return;
+    }
+
     const exists = await Subject.findOne({ code: finalCode });
     if (exists) {
       res.status(400).json({ success: false, message: `Subject with code '${finalCode}' already exists` });
@@ -132,6 +143,7 @@ export const createSubject = async (req: AuthRequest, res: Response): Promise<vo
       credits: Number(credits) || 4,
       semester: Number(semester) || 1,
       department: department.trim(),
+      course: course.trim(),
       facultyName: facultyName ? facultyName.trim() : 'Unassigned',
       facultyId: facultyId || null,
       type: ['THEORY', 'PRACTICAL', 'ELECTIVE'].includes(type) ? type : 'THEORY',
@@ -154,7 +166,7 @@ export const updateSubject = async (req: AuthRequest, res: Response): Promise<vo
       return;
     }
 
-    const { name, code, credits, semester, department, facultyName, facultyId, type, status } = req.body;
+    const { name, code, credits, semester, department, course, facultyName, facultyId, type, status } = req.body;
 
     const updateData: any = {};
 
@@ -183,6 +195,13 @@ export const updateSubject = async (req: AuthRequest, res: Response): Promise<vo
     if (credits !== undefined) updateData.credits = Number(credits) || 1;
     if (semester !== undefined) updateData.semester = Number(semester) || 1;
     if (department !== undefined) updateData.department = department.trim();
+    if (course !== undefined) {
+      if (!course || typeof course !== 'string' || course.trim() === '') {
+        res.status(400).json({ success: false, message: 'Course cannot be empty' });
+        return;
+      }
+      updateData.course = course.trim();
+    }
     if (facultyName !== undefined) updateData.facultyName = facultyName.trim();
     if (facultyId !== undefined) updateData.facultyId = facultyId || null;
     if (type !== undefined) updateData.type = type;

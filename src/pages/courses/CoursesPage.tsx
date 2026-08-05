@@ -136,10 +136,22 @@ export const CoursesPage: React.FC = () => {
     setSnackbar({ open: true, message, severity });
   };
 
+  // Sync faculty department on user load
+  useEffect(() => {
+    if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+      setDeptFilter(user.department);
+      setFormData((prev) => ({ ...prev, department: user.department || '' }));
+    }
+  }, [user?.role, user?.department]);
+
   // Fetch Department options for dropdown
   useEffect(() => {
     const loadDepartments = async () => {
       try {
+        if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+          setDepartmentsList([user.department]);
+          return;
+        }
         const res = await departmentService.getDepartments();
         if (res.departments && res.departments.length > 0) {
           const names = Array.from(new Set(res.departments.map((d: Department) => d.name)));
@@ -150,16 +162,20 @@ export const CoursesPage: React.FC = () => {
       }
     };
     if (token) loadDepartments();
-  }, [token]);
+  }, [token, user?.role, user?.department]);
 
   // Fetch Courses
   const fetchCourses = useCallback(async () => {
     if (!token) return;
     setLoading(true);
     try {
+      const activeDept = (user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department 
+        ? user.department 
+        : (deptFilter !== 'ALL' ? deptFilter : undefined);
+
       const res = await courseService.getCourses({
         search: search.trim() || undefined,
-        department: deptFilter !== 'ALL' ? deptFilter : undefined,
+        department: activeDept,
         semester: semesterFilter !== 'ALL' ? Number(semesterFilter) : undefined,
         status: statusFilter !== 'ALL' ? statusFilter : undefined,
         page: page + 1,
@@ -175,7 +191,7 @@ export const CoursesPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [token, search, deptFilter, semesterFilter, statusFilter, page, rowsPerPage]);
+  }, [token, search, deptFilter, semesterFilter, statusFilter, page, rowsPerPage, user?.role, user?.department]);
 
   useEffect(() => {
     fetchCourses();

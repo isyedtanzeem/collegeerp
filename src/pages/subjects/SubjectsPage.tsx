@@ -117,6 +117,14 @@ export const SubjectsPage: React.FC = () => {
     severity: 'success',
   });
 
+  // Sync faculty department on user load
+  useEffect(() => {
+    if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+      setSelectedDept(user.department);
+      setFormData((prev) => ({ ...prev, department: user.department || '' }));
+    }
+  }, [user?.role, user?.department]);
+
   // Fetch Dropdown data (Faculties & Departments)
   const fetchDropdownData = useCallback(async () => {
     try {
@@ -128,12 +136,16 @@ export const SubjectsPage: React.FC = () => {
         setFacultyList(facRes.users);
       }
       if (deptRes.success && deptRes.departments) {
-        setDepartmentList(deptRes.departments);
+        if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+          setDepartmentList([{ _id: 'dept-user', name: user.department, code: 'DEPT' } as any]);
+        } else {
+          setDepartmentList(deptRes.departments);
+        }
       }
     } catch (err) {
       console.error('Error fetching dropdown references:', err);
     }
-  }, []);
+  }, [user?.role, user?.department]);
 
   // Fetch Subjects
   const fetchSubjects = useCallback(async () => {

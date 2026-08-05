@@ -62,6 +62,7 @@ import CakeIcon from '@mui/icons-material/Cake';
 import BloodtypeIcon from '@mui/icons-material/Bloodtype';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
+import { useAuth } from '../../context/AuthContext.js';
 import { Student, Department, Course } from '../../types/index.js';
 import { studentService } from '../../services/studentService.js';
 import { departmentService } from '../../services/departmentService.js';
@@ -74,6 +75,8 @@ const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 const STATUSES = ['ACTIVE', 'INACTIVE', 'SUSPENDED', 'GRADUATED'];
 
 export const StudentsPage: React.FC = () => {
+  const { user } = useAuth();
+
   // State
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -143,6 +146,14 @@ export const StudentsPage: React.FC = () => {
     severity: 'success',
   });
 
+  // Sync faculty department on user load
+  useEffect(() => {
+    if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+      setSelectedDept(user.department);
+      setFormData((prev) => ({ ...prev, department: user.department || '' }));
+    }
+  }, [user?.role, user?.department]);
+
   // Fetch Dropdowns (Departments & Courses)
   const fetchDropdownData = useCallback(async () => {
     try {
@@ -151,15 +162,23 @@ export const StudentsPage: React.FC = () => {
         courseService.getCourses(),
       ]);
       if (deptRes.success && deptRes.departments) {
-        setDepartmentList(deptRes.departments);
+        if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+          setDepartmentList([{ _id: 'dept-user', name: user.department } as any]);
+        } else {
+          setDepartmentList(deptRes.departments);
+        }
       }
       if (courseRes.success && courseRes.courses) {
-        setCourseList(courseRes.courses);
+        if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+          setCourseList(courseRes.courses.filter((c: any) => !c.department || c.department === user.department));
+        } else {
+          setCourseList(courseRes.courses);
+        }
       }
     } catch (err) {
       console.error('Error fetching department/course options:', err);
     }
-  }, []);
+  }, [user?.role, user?.department]);
 
   // Fetch Students
   const fetchStudents = useCallback(async () => {

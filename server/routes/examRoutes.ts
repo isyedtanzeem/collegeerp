@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { AuthRequest } from '../middleware/authMiddleware.js';
 import Exam from '../models/Exam.js';
 import ExamHall from '../models/ExamHall.js';
 import ExamMark from '../models/ExamMark.js';
@@ -21,13 +22,17 @@ const calculateGrade = (pct: number): { grade: string; isPassed: boolean } => {
 // ============================================================================
 
 // GET all exams (with filters and search)
-router.get('/', async (req: Request, res: Response): Promise<void> => {
+router.get('/', async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { department, course, semester, examType, status, search } = req.query;
 
     const query: any = {};
 
-    if (department && department !== 'ALL') query.department = department;
+    if ((req.user?.role === 'FACULTY' || req.user?.role === 'HOD') && req.user?.department) {
+      query.department = req.user.department;
+    } else if (department && department !== 'ALL') {
+      query.department = department;
+    }
     if (course && course !== 'ALL') query.course = course;
     if (semester && semester !== 'ALL') query.semester = Number(semester);
     if (examType && examType !== 'ALL') query.examType = examType;

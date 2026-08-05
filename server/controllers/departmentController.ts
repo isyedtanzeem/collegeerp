@@ -10,6 +10,11 @@ export const getDepartments = async (req: AuthRequest, res: Response): Promise<v
 
     const query: any = {};
 
+    // Role-based scope for FACULTY / HOD
+    if ((req.user?.role === 'FACULTY' || req.user?.role === 'HOD') && req.user?.department) {
+      query.name = req.user.department;
+    }
+
     // Search filter
     if (search && typeof search === 'string' && search.trim() !== '') {
       const searchRegex = new RegExp(search.trim(), 'i');

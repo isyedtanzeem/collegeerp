@@ -143,6 +143,13 @@ export const MarksPage: React.FC = () => {
     severity: 'success',
   });
 
+  // Sync faculty department on user load
+  useEffect(() => {
+    if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+      setGenDept(user.department);
+    }
+  }, [user?.role, user?.department]);
+
   // Load Metadata
   const fetchMetadata = useCallback(async () => {
     try {
@@ -159,13 +166,25 @@ export const MarksPage: React.FC = () => {
         setLookupStudentId(defaultId);
         setTranscriptStudentId(defaultId);
       }
-      if (examRes.success && examRes.exams.length > 0) setExams(examRes.exams);
+      if (examRes.success && examRes.exams.length > 0) {
+        if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+          setExams(examRes.exams.filter((e: any) => !e.department || e.department === user.department));
+        } else {
+          setExams(examRes.exams);
+        }
+      }
       if (subjRes.success) setSubjects(subjRes.subjects || []);
-      if (deptRes.success) setDepartments(deptRes.departments || []);
+      if (deptRes.success) {
+        if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+          setDepartments([{ _id: 'dept-user', name: user.department }]);
+        } else {
+          setDepartments(deptRes.departments || []);
+        }
+      }
     } catch (err) {
       console.error('Error loading metadata for Marks module:', err);
     }
-  }, []);
+  }, [user?.role, user?.department, user?._id]);
 
   useEffect(() => {
     fetchMetadata();

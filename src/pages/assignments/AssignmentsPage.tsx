@@ -85,6 +85,14 @@ export const AssignmentsPage: React.FC = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
 
+  // Sync faculty department on user load
+  useEffect(() => {
+    if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+      setDepartmentFilter(user.department);
+      setAssignmentFormData((prev) => ({ ...prev, department: user.department || '' }));
+    }
+  }, [user?.role, user?.department]);
+
   // Submissions State for Grading
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loadingSubmissions, setLoadingSubmissions] = useState<boolean>(false);
@@ -649,8 +657,11 @@ export const AssignmentsPage: React.FC = () => {
                     label="Department"
                     onChange={(e) => setDepartmentFilter(e.target.value)}
                   >
-                    <MenuItem value="ALL">All Departments</MenuItem>
-                    {departments.map((d) => (
+                    {!(user?.role === 'FACULTY' || user?.role === 'HOD') && <MenuItem value="ALL">All Departments</MenuItem>}
+                    {((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department
+                      ? [{ _id: 'dept-user', name: user.department }]
+                      : departments
+                    ).map((d) => (
                       <MenuItem key={d._id} value={d.name}>
                         {d.name}
                       </MenuItem>

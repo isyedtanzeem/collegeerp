@@ -23,8 +23,10 @@ export const getCourses = async (req: AuthRequest, res: Response): Promise<void>
       ];
     }
 
-    // Department filter
-    if (department && department !== 'ALL') {
+    // Department filter (enforce faculty/HOD role-based scope)
+    if ((req.user?.role === 'FACULTY' || req.user?.role === 'HOD') && req.user?.department) {
+      query.department = req.user.department;
+    } else if (department && department !== 'ALL') {
       query.department = department;
     }
 

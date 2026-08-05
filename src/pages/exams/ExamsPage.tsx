@@ -168,6 +168,14 @@ export const ExamsPage: React.FC = () => {
     severity: 'success',
   });
 
+  // Sync faculty department on user load
+  useEffect(() => {
+    if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+      setFilterDept(user.department);
+      setExamForm((prev) => ({ ...prev, department: user.department || '' }));
+    }
+  }, [user?.role, user?.department]);
+
   // Load Reference Metadata
   const fetchMetadata = useCallback(async () => {
     try {
@@ -630,8 +638,11 @@ export const ExamsPage: React.FC = () => {
                 <FormControl fullWidth size="small">
                   <InputLabel>Department</InputLabel>
                   <Select value={filterDept} label="Department" onChange={(e) => setFilterDept(e.target.value)}>
-                    <MenuItem value="ALL">All Departments</MenuItem>
-                    {departments.map((d) => (
+                    {!(user?.role === 'FACULTY' || user?.role === 'HOD') && <MenuItem value="ALL">All Departments</MenuItem>}
+                    {((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department
+                      ? [{ _id: 'dept-user', name: user.department }]
+                      : departments
+                    ).map((d) => (
                       <MenuItem key={d._id} value={d.name}>
                         {d.name}
                       </MenuItem>

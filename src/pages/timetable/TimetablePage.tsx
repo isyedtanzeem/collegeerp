@@ -85,6 +85,14 @@ export const TimetablePage: React.FC = () => {
   // Active Tab
   const [activeTab, setActiveTab] = useState<number>(0);
 
+  // Sync faculty department on user load
+  useEffect(() => {
+    if ((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department) {
+      setDeptFilter(user.department);
+      setFormData((prev) => ({ ...prev, department: user.department || '' }));
+    }
+  }, [user?.role, user?.department]);
+
   // Master Data
   const [slots, setSlots] = useState<TimetableSlot[]>([]);
   const [roomStats, setRoomStats] = useState<RoomOccupancy[]>([]);
@@ -544,8 +552,11 @@ export const TimetablePage: React.FC = () => {
                     label="Department"
                     onChange={(e) => setDeptFilter(e.target.value)}
                   >
-                    <MenuItem value="ALL">All Departments</MenuItem>
-                    {departments.map((d) => (
+                    {!(user?.role === 'FACULTY' || user?.role === 'HOD') && <MenuItem value="ALL">All Departments</MenuItem>}
+                    {((user?.role === 'FACULTY' || user?.role === 'HOD') && user?.department
+                      ? [{ _id: 'dept-user', name: user.department }]
+                      : departments
+                    ).map((d) => (
                       <MenuItem key={d._id} value={d.name}>
                         {d.name}
                       </MenuItem>

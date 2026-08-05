@@ -169,10 +169,23 @@ export const AttendancePage: React.FC = () => {
     fetchMetadata();
   }, [fetchMetadata]);
 
+  // Sync faculty department on user load
+  useEffect(() => {
+    if ((userRole === 'FACULTY' || userRole === 'HOD') && user?.department) {
+      setMarkDept(user.department);
+      setReportDept(user.department);
+    }
+  }, [userRole, user?.department]);
+
   // Helper options generator to guarantee non-empty robust dropdown options
   const getCourseOptions = (currentSelected?: string) => {
-    const fromDb = courses.map((c) => c.title || c.name || c.code).filter(Boolean);
-    const standardCourses = [
+    let dbCourses = courses;
+    if ((userRole === 'FACULTY' || userRole === 'HOD') && user?.department) {
+      dbCourses = courses.filter((c) => !c.department || c.department === user.department);
+    }
+    const fromDb = dbCourses.map((c) => c.title || c.name || c.code).filter(Boolean);
+    
+    let standardCourses = [
       'B.Tech Computer Science',
       'B.Tech Electronics & Communication',
       'B.Tech Mechanical Engineering',
@@ -183,6 +196,22 @@ export const AttendancePage: React.FC = () => {
       'B.Sc Computer Science',
       'M.Tech Computer Science',
     ];
+
+    if ((userRole === 'FACULTY' || userRole === 'HOD') && user?.department) {
+      const deptLower = user.department.toLowerCase();
+      if (deptLower.includes('computer') || deptLower.includes('cs') || deptLower.includes('it')) {
+        standardCourses = ['B.Tech Computer Science', 'Master of Computer Applications (MCA)', 'B.Sc Computer Science', 'M.Tech Computer Science'];
+      } else if (deptLower.includes('electronics') || deptLower.includes('ece')) {
+        standardCourses = ['B.Tech Electronics & Communication', 'M.Tech Electronics'];
+      } else if (deptLower.includes('mechanical') || deptLower.includes('me')) {
+        standardCourses = ['B.Tech Mechanical Engineering', 'M.Tech Thermal Engg'];
+      } else if (deptLower.includes('civil') || deptLower.includes('ce')) {
+        standardCourses = ['B.Tech Civil Engineering', 'M.Tech Structural Engg'];
+      } else if (deptLower.includes('management') || deptLower.includes('business') || deptLower.includes('mba')) {
+        standardCourses = ['Master of Business Administration (MBA)', 'BBA'];
+      }
+    }
+
     const set = new Set<string>();
     fromDb.forEach((c) => set.add(c));
     standardCourses.forEach((c) => set.add(c));
@@ -191,6 +220,9 @@ export const AttendancePage: React.FC = () => {
   };
 
   const getDepartmentOptions = (currentSelected?: string) => {
+    if ((userRole === 'FACULTY' || userRole === 'HOD') && user?.department) {
+      return [user.department];
+    }
     const fromDb = departments.map((d) => d.name || d.title).filter(Boolean);
     const standardDepts = [
       'Computer Science & Engineering',
@@ -208,7 +240,11 @@ export const AttendancePage: React.FC = () => {
   };
 
   const getSubjectOptions = (currentSelected?: string) => {
-    const fromDb = subjects.map((s) => s.name).filter(Boolean);
+    let dbSubjects = subjects;
+    if ((userRole === 'FACULTY' || userRole === 'HOD') && user?.department) {
+      dbSubjects = subjects.filter((s) => !s.department || s.department === user.department || s.facultyName === user.name);
+    }
+    const fromDb = dbSubjects.map((s) => s.name).filter(Boolean);
     const standardSubjs = [
       'Data Structures & Algorithms',
       'Database Management Systems',

@@ -285,7 +285,7 @@ export const ExamsPage: React.FC = () => {
       title: '',
       examType: 'INTERNAL',
       department: departments[0]?.name || 'Computer Science & Engineering',
-      course: courses[0]?.name || 'B.Tech Computer Science',
+      course: courses[0]?.title || courses[0]?.name || 'B.Tech Computer Science',
       semester: 3,
       academicYear: '2025-2026',
       subject: subjects[0]?.name || 'Data Structures & Algorithms',
@@ -1326,11 +1326,26 @@ export const ExamsPage: React.FC = () => {
                   label="Course"
                   onChange={(e) => setExamForm({ ...examForm, course: e.target.value })}
                 >
-                  {courses.map((c) => (
-                    <MenuItem key={c._id} value={c.name}>
-                      {c.name}
-                    </MenuItem>
-                  ))}
+                  {(() => {
+                    const fromDb = courses.map((c) => c.title || c.name || c.code).filter(Boolean);
+                    const defaultCourses = [
+                      'B.Tech Computer Science',
+                      'B.Tech Electronics & Communication',
+                      'B.Tech Mechanical Engineering',
+                      'B.Tech Civil Engineering',
+                      'Master of Computer Applications (MCA)',
+                      'Master of Business Administration (MBA)',
+                    ];
+                    const set = new Set<string>();
+                    fromDb.forEach((c) => set.add(c));
+                    defaultCourses.forEach((c) => set.add(c));
+                    if (examForm.course) set.add(examForm.course);
+                    return Array.from(set).map((cName) => (
+                      <MenuItem key={cName} value={cName}>
+                        {cName}
+                      </MenuItem>
+                    ));
+                  })()}
                 </Select>
               </FormControl>
             </Grid>

@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import User from '../models/User.js';
 import { AuthRequest } from '../middleware/authMiddleware.js';
+import { syncUserToEntity, syncUserDeletion } from '../services/userSyncService.js';
 
 // @desc Get all users with search and role filter
 // @route GET /api/v1/users
@@ -66,9 +67,12 @@ export const createUser = async (req: AuthRequest, res: Response): Promise<void>
       phone,
     });
 
+    // Auto sync user to corresponding Faculty or Student collection
+    await syncUserToEntity(user);
+
     res.status(201).json({
       success: true,
-      message: 'User created successfully',
+      message: 'User created and mapped to system directory successfully',
       user: {
         _id: user._id,
         name: user.name,
@@ -95,7 +99,10 @@ export const updateUser = async (req: AuthRequest, res: Response): Promise<void>
     Object.assign(user, req.body);
     const updated = await user.save();
 
-    res.json({ success: true, message: 'User updated successfully', user: updated });
+    // Auto sync updated details to Faculty or Student collection
+    await syncUserToEntity(updated);
+
+    res.json({ success: true, message: 'User updated and synchronized successfully', user: updated });
   } catch (error) {
     res.status(500).json({ success: false, message: (error as Error).message });
   }
@@ -111,8 +118,11 @@ export const deleteUser = async (req: AuthRequest, res: Response): Promise<void>
       return;
     }
 
+    const userEmail = user.email;
     await user.deleteOne();
-    res.json({ success: true, message: 'User deleted successfully' });
+    await syncUserDeletion(userEmail);
+
+    res.json({ success: true, message: 'User and mapped record deleted successfully' });
   } catch (error) {
     res.status(500).json({ success: false, message: (error as Error).message });
   }

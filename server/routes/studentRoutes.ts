@@ -3,6 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import Student from '../models/Student.js';
+import { syncStudentToUser, syncEntityDeletion } from '../services/userSyncService.js';
 
 const router = express.Router();
 
@@ -218,9 +219,12 @@ router.post('/', upload.single('photo'), async (req: Request, res: Response): Pr
       status: body.status || 'ACTIVE',
     });
 
+    // Auto sync to User account
+    await syncStudentToUser(newStudent);
+
     res.status(201).json({
       success: true,
-      message: 'Student registered successfully',
+      message: 'Student registered and user account created successfully',
       student: newStudent,
     });
   } catch (err: any) {
@@ -306,9 +310,12 @@ router.put('/:id', upload.single('photo'), async (req: Request, res: Response): 
 
     await student.save();
 
+    // Auto sync updated student details to User account
+    await syncStudentToUser(student);
+
     res.json({
       success: true,
-      message: 'Student updated successfully',
+      message: 'Student updated and account synchronized successfully',
       student,
     });
   } catch (err: any) {
@@ -326,9 +333,13 @@ router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    if (student.email) {
+      await syncEntityDeletion(student.email);
+    }
+
     res.json({
       success: true,
-      message: `Student ${student.name} (${student.studentId}) deleted successfully.`,
+      message: `Student ${student.name} (${student.studentId}) and associated user account deleted successfully.`,
     });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message || 'Failed to delete student' });

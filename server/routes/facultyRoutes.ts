@@ -3,6 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import Faculty from '../models/Faculty.js';
+import { syncFacultyToUser, syncEntityDeletion } from '../services/userSyncService.js';
 
 const router = express.Router();
 
@@ -193,9 +194,12 @@ router.post('/', upload.single('photo'), async (req: Request, res: Response): Pr
       status: body.status || 'ACTIVE',
     });
 
+    // Auto sync to User account
+    await syncFacultyToUser(newFaculty);
+
     res.status(201).json({
       success: true,
-      message: 'Faculty registered successfully',
+      message: 'Faculty registered and account created successfully',
       faculty: newFaculty,
     });
   } catch (err: any) {
@@ -269,9 +273,12 @@ router.put('/:id', upload.single('photo'), async (req: Request, res: Response): 
 
     await faculty.save();
 
+    // Auto sync updated faculty details to User account
+    await syncFacultyToUser(faculty);
+
     res.json({
       success: true,
-      message: 'Faculty details updated successfully',
+      message: 'Faculty details updated and account synced successfully',
       faculty,
     });
   } catch (err: any) {
@@ -289,9 +296,13 @@ router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    if (faculty.email) {
+      await syncEntityDeletion(faculty.email);
+    }
+
     res.json({
       success: true,
-      message: `Faculty ${faculty.name} (${faculty.employeeId}) removed successfully.`,
+      message: `Faculty ${faculty.name} (${faculty.employeeId}) and associated user account removed successfully.`,
     });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message || 'Failed to delete faculty' });

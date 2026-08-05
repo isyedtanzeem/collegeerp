@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { JWT_SECRET, JWT_EXPIRE, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRE } from '../config/jwt.js';
 import User, { UserRole } from '../models/User.js';
 import { AuthRequest } from '../middleware/authMiddleware.js';
+import { syncUserToEntity } from '../services/userSyncService.js';
 
 // Helper to generate access token
 const generateAccessToken = (id: string, email?: string, role?: string): string => {
@@ -91,6 +92,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     user.refreshToken = refreshToken;
     await user.save();
+
+    // Sync registered user with Faculty or Student entity database
+    await syncUserToEntity(user);
 
     res.status(201).json({
       success: true,
@@ -328,6 +332,7 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
     if (req.body.avatar) user.avatar = req.body.avatar;
 
     const updatedUser = await user.save();
+    await syncUserToEntity(updatedUser);
 
     res.json({
       success: true,

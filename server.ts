@@ -7,6 +7,7 @@ import { createServer as createViteServer } from 'vite';
 
 import { connectDB } from './server/config/db.js';
 import { seedDatabase } from './server/utils/seedData.js';
+import { syncAllUsersAndEntities } from './server/services/userSyncService.js';
 import User from './server/models/User.js';
 import Department from './server/models/Department.js';
 import Course from './server/models/Course.js';
@@ -46,6 +47,7 @@ async function startServer() {
   // Connect Database & Seed Data
   await connectDB();
   await seedDatabase();
+  await syncAllUsersAndEntities();
 
   // Middleware
   app.use(

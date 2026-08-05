@@ -96,6 +96,21 @@ const DEFAULT_ROLE_PERMISSIONS = [
       { module: 'settings', canRead: false, canCreate: false, canUpdate: false, canDelete: false, canExport: false },
     ],
   },
+  {
+    role: 'LIBRARIAN',
+    description: 'Library Book Catalog, Issue/Return Desk & Circulation Management',
+    isSystemRole: true,
+    permissions: [
+      { module: 'students', canRead: true, canCreate: false, canUpdate: false, canDelete: false, canExport: true },
+      { module: 'faculty', canRead: true, canCreate: false, canUpdate: false, canDelete: false, canExport: false },
+      { module: 'academics', canRead: true, canCreate: false, canUpdate: false, canDelete: false, canExport: false },
+      { module: 'attendance', canRead: false, canCreate: false, canUpdate: false, canDelete: false, canExport: false },
+      { module: 'fees', canRead: false, canCreate: false, canUpdate: false, canDelete: false, canExport: false },
+      { module: 'library', canRead: true, canCreate: true, canUpdate: true, canDelete: true, canExport: true },
+      { module: 'reports', canRead: true, canCreate: false, canUpdate: false, canDelete: false, canExport: true },
+      { module: 'settings', canRead: false, canCreate: false, canUpdate: false, canDelete: false, canExport: false },
+    ],
+  },
 ];
 
 // @desc    Get System Settings

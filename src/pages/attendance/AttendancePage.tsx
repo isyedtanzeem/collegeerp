@@ -169,6 +169,62 @@ export const AttendancePage: React.FC = () => {
     fetchMetadata();
   }, [fetchMetadata]);
 
+  // Helper options generator to guarantee non-empty robust dropdown options
+  const getCourseOptions = (currentSelected?: string) => {
+    const fromDb = courses.map((c) => c.title || c.name || c.code).filter(Boolean);
+    const standardCourses = [
+      'B.Tech Computer Science',
+      'B.Tech Electronics & Communication',
+      'B.Tech Mechanical Engineering',
+      'B.Tech Civil Engineering',
+      'B.Tech Electrical Engineering',
+      'Master of Computer Applications (MCA)',
+      'Master of Business Administration (MBA)',
+      'B.Sc Computer Science',
+      'M.Tech Computer Science',
+    ];
+    const set = new Set<string>();
+    fromDb.forEach((c) => set.add(c));
+    standardCourses.forEach((c) => set.add(c));
+    if (currentSelected) set.add(currentSelected);
+    return Array.from(set);
+  };
+
+  const getDepartmentOptions = (currentSelected?: string) => {
+    const fromDb = departments.map((d) => d.name || d.title).filter(Boolean);
+    const standardDepts = [
+      'Computer Science & Engineering',
+      'Electronics & Communication',
+      'Mechanical Engineering',
+      'Civil Engineering',
+      'Electrical Engineering',
+      'Management Studies',
+    ];
+    const set = new Set<string>();
+    fromDb.forEach((d) => set.add(d));
+    standardDepts.forEach((d) => set.add(d));
+    if (currentSelected) set.add(currentSelected);
+    return Array.from(set);
+  };
+
+  const getSubjectOptions = (currentSelected?: string) => {
+    const fromDb = subjects.map((s) => s.name).filter(Boolean);
+    const standardSubjs = [
+      'Data Structures & Algorithms',
+      'Database Management Systems',
+      'Operating Systems',
+      'Computer Networks',
+      'Software Engineering',
+      'Web Technologies',
+      'Object Oriented Programming',
+    ];
+    const set = new Set<string>();
+    fromDb.forEach((s) => set.add(s));
+    standardSubjs.forEach((s) => set.add(s));
+    if (currentSelected) set.add(currentSelected);
+    return Array.from(set);
+  };
+
   // Load Roster for Faculty Marking
   const handleLoadClassRoster = useCallback(async () => {
     if (!markDept || !markCourse) return;
@@ -466,9 +522,9 @@ export const AttendancePage: React.FC = () => {
                 <FormControl fullWidth size="small">
                   <InputLabel>Department</InputLabel>
                   <Select value={markDept} label="Department" onChange={(e) => setMarkDept(e.target.value)}>
-                    {departments.map((d) => (
-                      <MenuItem key={d._id} value={d.name}>
-                        {d.name}
+                    {getDepartmentOptions(markDept).map((dName) => (
+                      <MenuItem key={dName} value={dName}>
+                        {dName}
                       </MenuItem>
                     ))}
                   </Select>
@@ -479,9 +535,9 @@ export const AttendancePage: React.FC = () => {
                 <FormControl fullWidth size="small">
                   <InputLabel>Course</InputLabel>
                   <Select value={markCourse} label="Course" onChange={(e) => setMarkCourse(e.target.value)}>
-                    {courses.map((c) => (
-                      <MenuItem key={c._id} value={c.name}>
-                        {c.name}
+                    {getCourseOptions(markCourse).map((cName) => (
+                      <MenuItem key={cName} value={cName}>
+                        {cName}
                       </MenuItem>
                     ))}
                   </Select>
@@ -518,9 +574,9 @@ export const AttendancePage: React.FC = () => {
                 <FormControl fullWidth size="small">
                   <InputLabel>Teaching Subject</InputLabel>
                   <Select value={markSubject} label="Teaching Subject" onChange={(e) => setMarkSubject(e.target.value)}>
-                    {subjects.map((s) => (
-                      <MenuItem key={s._id} value={s.name}>
-                        {s.name} ({s.code})
+                    {getSubjectOptions(markSubject).map((sName) => (
+                      <MenuItem key={sName} value={sName}>
+                        {sName}
                       </MenuItem>
                     ))}
                   </Select>
@@ -700,9 +756,9 @@ export const AttendancePage: React.FC = () => {
                 <FormControl fullWidth size="small">
                   <InputLabel>Department</InputLabel>
                   <Select value={reportDept} label="Department" onChange={(e) => setReportDept(e.target.value)}>
-                    {departments.map((d) => (
-                      <MenuItem key={d._id} value={d.name}>
-                        {d.name}
+                    {getDepartmentOptions(reportDept).map((dName) => (
+                      <MenuItem key={dName} value={dName}>
+                        {dName}
                       </MenuItem>
                     ))}
                   </Select>
@@ -713,9 +769,9 @@ export const AttendancePage: React.FC = () => {
                 <FormControl fullWidth size="small">
                   <InputLabel>Course</InputLabel>
                   <Select value={reportCourse} label="Course" onChange={(e) => setReportCourse(e.target.value)}>
-                    {courses.map((c) => (
-                      <MenuItem key={c._id} value={c.name}>
-                        {c.name}
+                    {getCourseOptions(reportCourse).map((cName) => (
+                      <MenuItem key={cName} value={cName}>
+                        {cName}
                       </MenuItem>
                     ))}
                   </Select>

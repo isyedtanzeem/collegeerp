@@ -64,9 +64,10 @@ import { studentService } from '../../services/studentService.js';
 
 export const LibraryPage: React.FC = () => {
   const { user } = useAuth();
+  const isStudent = user?.role === 'STUDENT';
 
-  // Active Tab Index
-  const [activeTab, setActiveTab] = useState<number>(0);
+  // Active Tab Key string
+  const [activeTabKey, setActiveTabKey] = useState<string>('catalog');
 
   // Stats & Master Data State
   const [stats, setStats] = useState<LibraryStats | null>(null);
@@ -252,11 +253,18 @@ export const LibraryPage: React.FC = () => {
   }, [fetchStats, fetchCategories, fetchStudentsList]);
 
   useEffect(() => {
-    if (activeTab === 0) fetchBooks();
-    if (activeTab === 1) fetchCategories();
-    if (activeTab === 3 || activeTab === 4) fetchIssues();
-    if (activeTab === 6) fetchFines();
-  }, [activeTab, fetchBooks, fetchCategories, fetchIssues, fetchFines]);
+    if (activeTabKey === 'catalog') fetchBooks();
+    if (activeTabKey === 'categories') fetchCategories();
+    if (activeTabKey === 'return' || activeTabKey === 'transactions') fetchIssues();
+    if (activeTabKey === 'fines') fetchFines();
+    if (activeTabKey === 'my_history' && isStudent && students.length > 0) {
+      const matchedStudent = students.find((s) => s.email === user?.email) || students[0];
+      if (matchedStudent && matchedStudent._id !== selectedStudentId) {
+        setSelectedStudentId(matchedStudent._id);
+        fetchStudentHistory(matchedStudent._id);
+      }
+    }
+  }, [activeTabKey, isStudent, students, user, selectedStudentId, fetchBooks, fetchCategories, fetchIssues, fetchFines]);
 
   // BOOK HANDLERS
   const handleOpenCreateBook = () => {
@@ -640,27 +648,28 @@ export const LibraryPage: React.FC = () => {
       {/* MODULE TABS NAV */}
       <Paper variant="outlined" sx={{ borderRadius: 2.5, mb: 3 }}>
         <Tabs
-          value={activeTab}
-          onChange={(_e, val) => setActiveTab(val)}
+          value={activeTabKey}
+          onChange={(_e, val) => setActiveTabKey(val)}
           variant="scrollable"
           scrollButtons="auto"
           indicatorColor="primary"
           textColor="primary"
           sx={{ px: 2, borderBottom: 1, borderColor: 'divider' }}
         >
-          <Tab icon={<MenuBookIcon />} iconPosition="start" label="Books Catalog" />
-          {user?.role !== 'STUDENT' && (
-            <Tab icon={<CategoryIcon />} iconPosition="start" label="Categories" />
+          <Tab value="catalog" icon={<MenuBookIcon />} iconPosition="start" label="Books Catalog" />
+          {!isStudent && (
+            <Tab value="categories" icon={<CategoryIcon />} iconPosition="start" label="Categories" />
           )}
-          {user?.role !== 'STUDENT' && (
-            <Tab icon={<AutoStoriesIcon />} iconPosition="start" label="Issue Book Desk" />
+          {!isStudent && (
+            <Tab value="issue" icon={<AutoStoriesIcon />} iconPosition="start" label="Issue Book Desk" />
           )}
-          {user?.role !== 'STUDENT' && (
-            <Tab icon={<AssignmentReturnIcon />} iconPosition="start" label="Return Book Desk" />
+          {!isStudent && (
+            <Tab value="return" icon={<AssignmentReturnIcon />} iconPosition="start" label="Return Book Desk" />
           )}
-          <Tab icon={<HistoryIcon />} iconPosition="start" label="Transaction Log" />
-          <Tab icon={<PersonIcon />} iconPosition="start" label="My Borrow History" />
+          <Tab value="transactions" icon={<HistoryIcon />} iconPosition="start" label="Transaction Log" />
+          <Tab value="my_history" icon={<PersonIcon />} iconPosition="start" label="My Borrow History" />
           <Tab
+            value="fines"
             icon={
               <Badge badgeContent={stats?.totalFinesPending ? `₹${stats.totalFinesPending}` : 0} color="error">
                 <LocalAtmIcon />
@@ -669,13 +678,13 @@ export const LibraryPage: React.FC = () => {
             iconPosition="start"
             label="Library Fines"
           />
-          {user?.role !== 'STUDENT' && (
-            <Tab icon={<PrintIcon />} iconPosition="start" label="Reports & Labels" />
+          {!isStudent && (
+            <Tab value="reports" icon={<PrintIcon />} iconPosition="start" label="Reports & Labels" />
           )}
         </Tabs>
 
-        {/* TAB 0: BOOKS CATALOG */}
-        {activeTab === 0 && (
+        {/* TAB CATALOG: BOOKS CATALOG */}
+        {activeTabKey === 'catalog' && (
           <Box sx={{ p: 3 }}>
             <Grid container spacing={2} sx={{ mb: 3, alignItems: 'center' }}>
               <Grid size={{ xs: 12, sm: 4, md: 5 }}>
@@ -730,11 +739,13 @@ export const LibraryPage: React.FC = () => {
                 </FormControl>
               </Grid>
 
-              <Grid size={{ xs: 12, sm: 2, md: 2 }}>
-                <Button fullWidth variant="contained" startIcon={<AddIcon />} onClick={handleOpenCreateBook}>
-                  New Book
-                </Button>
-              </Grid>
+              {!isStudent && (
+                <Grid size={{ xs: 12, sm: 2, md: 2 }}>
+                  <Button fullWidth variant="contained" startIcon={<AddIcon />} onClick={handleOpenCreateBook}>
+                    New Book
+                  </Button>
+                </Grid>
+              )}
             </Grid>
 
             {loadingBooks ? (
@@ -746,7 +757,7 @@ export const LibraryPage: React.FC = () => {
               </Box>
             ) : books.length === 0 ? (
               <Alert severity="info" sx={{ mt: 2 }}>
-                No books found matching criteria. Click "Add New Book" to populate catalog.
+                No books found matching criteria.
               </Alert>
             ) : (
               <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
@@ -759,9 +770,15 @@ export const LibraryPage: React.FC = () => {
                       <TableCell sx={{ fontWeight: 700 }}>Copies (Avail / Total)</TableCell>
                       <TableCell sx={{ fontWeight: 700 }}>Location Rack</TableCell>
                       <TableCell sx={{ fontWeight: 700 }}>Status</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 700 }}>
-                        Actions
-                      </TableCell>
+                      {!isStudent ? (
+                        <TableCell align="right" sx={{ fontWeight: 700 }}>
+                          Actions
+                        </TableCell>
+                      ) : (
+                        <TableCell align="right" sx={{ fontWeight: 700 }}>
+                          Access Level
+                        </TableCell>
+                      )}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -813,31 +830,37 @@ export const LibraryPage: React.FC = () => {
                           )}
                         </TableCell>
 
-                        <TableCell align="right">
-                          <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end' }}>
-                            <Tooltip title="Issue This Book">
-                              <span>
-                                <Button
-                                  size="small"
-                                  variant="outlined"
-                                  color="secondary"
-                                  disabled={b.availableCopies <= 0}
-                                  onClick={() => handleOpenIssueForBook(b)}
-                                >
-                                  Issue
-                                </Button>
-                              </span>
-                            </Tooltip>
+                        {!isStudent ? (
+                          <TableCell align="right">
+                            <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end' }}>
+                              <Tooltip title="Issue This Book">
+                                <span>
+                                  <Button
+                                    size="small"
+                                    variant="outlined"
+                                    color="secondary"
+                                    disabled={b.availableCopies <= 0}
+                                    onClick={() => handleOpenIssueForBook(b)}
+                                  >
+                                    Issue
+                                  </Button>
+                                </span>
+                              </Tooltip>
 
-                            <IconButton size="small" color="primary" onClick={() => handleOpenEditBook(b)}>
-                              <EditIcon fontSize="small" />
-                            </IconButton>
+                              <IconButton size="small" color="primary" onClick={() => handleOpenEditBook(b)}>
+                                <EditIcon fontSize="small" />
+                              </IconButton>
 
-                            <IconButton size="small" color="error" onClick={() => handleDeleteBook(b._id, b.title)}>
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </Stack>
-                        </TableCell>
+                              <IconButton size="small" color="error" onClick={() => handleDeleteBook(b._id, b.title)}>
+                                <DeleteIcon fontSize="small" />
+                              </IconButton>
+                            </Stack>
+                          </TableCell>
+                        ) : (
+                          <TableCell align="right">
+                            <Chip label="Read Only" size="small" variant="outlined" color="default" />
+                          </TableCell>
+                        )}
                       </TableRow>
                     ))}
                   </TableBody>
@@ -847,8 +870,8 @@ export const LibraryPage: React.FC = () => {
           </Box>
         )}
 
-        {/* TAB 1: CATEGORIES */}
-        {activeTab === 1 && (
+        {/* TAB CATEGORIES: CATEGORIES */}
+        {!isStudent && activeTabKey === 'categories' && (
           <Box sx={{ p: 3 }}>
             <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
               <Box>
@@ -940,8 +963,8 @@ export const LibraryPage: React.FC = () => {
           </Box>
         )}
 
-        {/* TAB 2: ISSUE BOOK DESK */}
-        {activeTab === 2 && (
+        {/* TAB ISSUE: ISSUE BOOK DESK */}
+        {!isStudent && activeTabKey === 'issue' && (
           <Box sx={{ p: 3, maxWidth: 800, mx: 'auto' }}>
             <Paper variant="outlined" sx={{ p: 3, borderRadius: 2.5 }}>
               <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
@@ -1064,8 +1087,8 @@ export const LibraryPage: React.FC = () => {
           </Box>
         )}
 
-        {/* TAB 3: RETURN BOOK DESK */}
-        {activeTab === 3 && (
+        {/* TAB RETURN: RETURN BOOK DESK */}
+        {!isStudent && activeTabKey === 'return' && (
           <Box sx={{ p: 3 }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
               Book Return Desk
@@ -1161,8 +1184,8 @@ export const LibraryPage: React.FC = () => {
           </Box>
         )}
 
-        {/* TAB 4: TRANSACTION LOG */}
-        {activeTab === 4 && (
+        {/* TAB TRANSACTIONS: TRANSACTION LOG */}
+        {activeTabKey === 'transactions' && (
           <Box sx={{ p: 3 }}>
             <Grid container spacing={2} sx={{ mb: 3, alignItems: 'center' }}>
               <Grid size={{ xs: 12, sm: 6, md: 6 }}>
@@ -1262,46 +1285,53 @@ export const LibraryPage: React.FC = () => {
           </Box>
         )}
 
-        {/* TAB 5: STUDENT HISTORY */}
-        {activeTab === 5 && (
+        {/* TAB MY_HISTORY: STUDENT BORROW HISTORY */}
+        {activeTabKey === 'my_history' && (
           <Box sx={{ p: 3 }}>
             <Paper variant="outlined" sx={{ p: 3, mb: 3, borderRadius: 2.5 }}>
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
-                Lookup Student Library Profile
+              <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+                {isStudent ? 'My Borrowed Books & Return Details' : 'Lookup Student Library Profile'}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                {isStudent
+                  ? 'View books you have borrowed, due dates, return dates, and fine status details.'
+                  : 'Search any student account to view their active loans, historical returned books, and pending fines.'}
               </Typography>
 
-              <Grid container spacing={2} sx={{ alignItems: 'center' }}>
-                <Grid size={{ xs: 12, sm: 8 }}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>Select Student</InputLabel>
-                    <Select
-                      value={selectedStudentId}
-                      label="Select Student"
-                      onChange={(e) => {
-                        setSelectedStudentId(e.target.value);
-                        fetchStudentHistory(e.target.value);
-                      }}
+              {!isStudent && (
+                <Grid container spacing={2} sx={{ alignItems: 'center' }}>
+                  <Grid size={{ xs: 12, sm: 8 }}>
+                    <FormControl fullWidth size="small">
+                      <InputLabel>Select Student</InputLabel>
+                      <Select
+                        value={selectedStudentId}
+                        label="Select Student"
+                        onChange={(e) => {
+                          setSelectedStudentId(e.target.value);
+                          fetchStudentHistory(e.target.value);
+                        }}
+                      >
+                        {students.map((st) => (
+                          <MenuItem key={st._id} value={st._id}>
+                            {st.name} ({st.studentId || st.admissionNumber}) — {st.department}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 4 }}>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      startIcon={<SearchIcon />}
+                      onClick={() => fetchStudentHistory(selectedStudentId)}
+                      disabled={!selectedStudentId}
                     >
-                      {students.map((st) => (
-                        <MenuItem key={st._id} value={st._id}>
-                          {st.name} ({st.studentId || st.admissionNumber}) — {st.department}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                      View Borrowing Record
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 4 }}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    startIcon={<SearchIcon />}
-                    onClick={() => fetchStudentHistory(selectedStudentId)}
-                    disabled={!selectedStudentId}
-                  >
-                    View Borrowing Record
-                  </Button>
-                </Grid>
-              </Grid>
+              )}
             </Paper>
 
             {loadingStudentHistory ? (
@@ -1369,7 +1399,7 @@ export const LibraryPage: React.FC = () => {
                       {studentHistoryData.history.length === 0 ? (
                         <TableRow>
                           <TableCell colSpan={7} align="center">
-                            No borrowing history recorded for this student.
+                            No borrowing history recorded for this student account.
                           </TableCell>
                         </TableRow>
                       ) : (
@@ -1395,12 +1425,14 @@ export const LibraryPage: React.FC = () => {
                   </Table>
                 </TableContainer>
               </Box>
+            ) : isStudent ? (
+              <Alert severity="info">Select or load your student account details to view your borrowing history.</Alert>
             ) : null}
           </Box>
         )}
 
-        {/* TAB 6: FINES MANAGEMENT */}
-        {activeTab === 6 && (
+        {/* TAB FINES: FINES MANAGEMENT */}
+        {activeTabKey === 'fines' && (
           <Box sx={{ p: 3 }}>
             <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
               <Box>
@@ -1517,8 +1549,8 @@ export const LibraryPage: React.FC = () => {
           </Box>
         )}
 
-        {/* TAB 7: REPORTS & LABELS */}
-        {activeTab === 7 && (
+        {/* TAB REPORTS: REPORTS & LABELS */}
+        {!isStudent && activeTabKey === 'reports' && (
           <Box sx={{ p: 3 }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
               Generate Reports & Labels

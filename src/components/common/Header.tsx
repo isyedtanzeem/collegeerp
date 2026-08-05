@@ -22,9 +22,12 @@ import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import StorageIcon from '@mui/icons-material/Storage';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 import { useNavigate } from 'react-router-dom';
-import { Logo } from './Logo';
+import { Logo } from './Logo.js';
 import { useAuth } from '../../context/AuthContext.js';
+import { useCustomTheme } from '../../context/ThemeContext.js';
 import { UserRole } from '../../types/index.js';
 
 interface HeaderProps {
@@ -61,6 +64,7 @@ interface DbHealth {
 
 export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const { user, logout, quickLoginRole } = useAuth();
+  const { effectiveMode, setThemeMode } = useCustomTheme();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [dbHealth, setDbHealth] = useState<DbHealth>({ connected: false, state: 'Checking', host: '', name: '' });
@@ -192,6 +196,21 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
               sx={{ fontWeight: 600, fontSize: '0.75rem' }}
             />
           )}
+
+          {/* Theme Quick Toggle */}
+          <Tooltip title={`Switch to ${effectiveMode === 'dark' ? 'Light' : 'Dark'} Mode`}>
+            <IconButton
+              color="inherit"
+              onClick={() => setThemeMode(effectiveMode === 'dark' ? 'light' : 'dark')}
+              sx={{ p: 1 }}
+            >
+              {effectiveMode === 'dark' ? (
+                <LightModeIcon sx={{ color: '#facc15', fontSize: 22 }} />
+              ) : (
+                <DarkModeIcon sx={{ color: '#475569', fontSize: 22 }} />
+              )}
+            </IconButton>
+          </Tooltip>
 
           {/* User Profile Avatar */}
           <IconButton onClick={handleOpenMenu} size="small" sx={{ ml: 0.5 }}>

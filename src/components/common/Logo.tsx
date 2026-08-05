@@ -11,7 +11,7 @@ export const Logo: React.FC<LogoProps> = ({ size = 'medium', variant = 'dark' })
   const titleSize = size === 'small' ? '1.05rem' : size === 'large' ? '1.45rem' : '1.2rem';
   const subtitleSize = size === 'small' ? '0.65rem' : size === 'large' ? '0.8rem' : '0.72rem';
 
-  const textColor = variant === 'light' ? '#ffffff' : '#0f172a';
+  const textColor = variant === 'light' ? '#ffffff' : 'text.primary';
   const accentColor = variant === 'light' ? '#38bdf8' : '#0284c7';
 
   return (

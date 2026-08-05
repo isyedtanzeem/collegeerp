@@ -50,6 +50,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { useAuth } from '../../context/AuthContext.js';
+import { useCustomTheme } from '../../context/ThemeContext.js';
 import { settingService, SystemSettingData, RolePermissionData, PermissionModule } from '../../services/settingService.js';
 import { userService } from '../../services/userService.js';
 import { User, UserRole } from '../../types/index.js';
@@ -145,9 +146,8 @@ export const SettingsPage: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  // Theme States
-  const [themeMode, setThemeMode] = useState<'light' | 'dark' | 'system'>('light');
-  const [primaryColor, setPrimaryColor] = useState('#0284c7');
+  // Theme States from Context
+  const { themeMode, setThemeMode, primaryColor, setPrimaryColor } = useCustomTheme();
 
   // System Settings States
   const [systemSetting, setSystemSetting] = useState<SystemSettingData>({
@@ -709,7 +709,7 @@ export const SettingsPage: React.FC = () => {
 
           <Stack spacing={4}>
             <Box>
-              <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: '#334155' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: 'text.secondary' }}>
                 PRIMARY ACCENT COLOR
               </Typography>
               <Grid container spacing={2}>
@@ -721,8 +721,9 @@ export const SettingsPage: React.FC = () => {
                         p: 2,
                         borderRadius: 2,
                         cursor: 'pointer',
-                        border: primaryColor === p.value ? `2px solid ${p.value}` : '1px solid #e2e8f0',
-                        bgcolor: primaryColor === p.value ? `${p.value}0d` : '#fff',
+                        border: primaryColor === p.value ? `2px solid ${p.value}` : '1px solid',
+                        borderColor: primaryColor === p.value ? p.value : 'divider',
+                        bgcolor: primaryColor === p.value ? `${p.value}18` : 'background.paper',
                         display: 'flex',
                         alignItems: 'center',
                         gap: 1.5,
@@ -743,7 +744,7 @@ export const SettingsPage: React.FC = () => {
             <Divider />
 
             <Box>
-              <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: '#334155' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: 'text.secondary' }}>
                 DISPLAY MODE
               </Typography>
               <Grid container spacing={2}>
@@ -756,8 +757,9 @@ export const SettingsPage: React.FC = () => {
                         borderRadius: 2,
                         cursor: 'pointer',
                         textAlign: 'center',
-                        border: themeMode === m ? `2px solid ${primaryColor}` : '1px solid #e2e8f0',
-                        bgcolor: themeMode === m ? `${primaryColor}0d` : '#fff',
+                        border: themeMode === m ? `2px solid ${primaryColor}` : '1px solid',
+                        borderColor: themeMode === m ? primaryColor : 'divider',
+                        bgcolor: themeMode === m ? `${primaryColor}18` : 'background.paper',
                         textTransform: 'capitalize',
                       }}
                     >

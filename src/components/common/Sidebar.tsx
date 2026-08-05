@@ -331,7 +331,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth, co
         </ListItem>
       </List>
 
-      <Box sx={{ p: isCollapsedMode ? 1.5 : 2, bgcolor: 'background.default', borderTop: '1px solid #e2e8f0', mt: 'auto', textAlign: 'center' }}>
+      <Box sx={{ p: isCollapsedMode ? 1.5 : 2, bgcolor: 'background.default', borderTop: '1px solid', borderColor: 'divider', mt: 'auto', textAlign: 'center' }}>
         {isCollapsedMode ? (
           <Tooltip title={`Active Role: ${userRole.replace('_', ' ')}`} placement="right" arrow>
             <Typography variant="caption" sx={{ fontWeight: 800, color: 'primary.main', display: 'block' }}>
@@ -378,7 +378,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onClose, drawerWidth, co
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            borderRight: '1px solid #e2e8f0',
+            borderRight: '1px solid',
+            borderColor: 'divider',
             top: 64,
             height: 'calc(100% - 64px)',
             overflowX: 'hidden',

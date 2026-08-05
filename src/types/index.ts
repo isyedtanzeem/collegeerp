@@ -27,6 +27,15 @@ export interface User {
   employeeId?: string;
   semester?: number;
   status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+  customPermissions?: {
+    module: string;
+    canRead: boolean;
+    canCreate: boolean;
+    canUpdate: boolean;
+    canDelete: boolean;
+    canExport: boolean;
+  }[];
+  allowedBehaviors?: string[];
   createdAt?: string;
 }
 

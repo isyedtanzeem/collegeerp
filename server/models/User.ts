@@ -11,6 +11,15 @@ export type UserRole =
   | 'ACCOUNTANT'
   | 'LIBRARIAN';
 
+export interface IUserModulePermission {
+  module: string;
+  canRead: boolean;
+  canCreate: boolean;
+  canUpdate: boolean;
+  canDelete: boolean;
+  canExport: boolean;
+}
+
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
   name: string;
@@ -25,6 +34,8 @@ export interface IUser extends Document {
   employeeId?: string; // For staff
   semester?: number; // For students
   status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+  customPermissions?: IUserModulePermission[];
+  allowedBehaviors?: string[];
   refreshToken?: string;
   resetPasswordToken?: string;
   resetPasswordExpire?: Date;
@@ -53,6 +64,17 @@ const UserSchema: Schema<IUser> = new Schema(
     employeeId: { type: String, default: '' },
     semester: { type: Number, default: 1 },
     status: { type: String, enum: ['ACTIVE', 'INACTIVE', 'SUSPENDED'], default: 'ACTIVE' },
+    customPermissions: [
+      {
+        module: { type: String },
+        canRead: { type: Boolean, default: true },
+        canCreate: { type: Boolean, default: false },
+        canUpdate: { type: Boolean, default: false },
+        canDelete: { type: Boolean, default: false },
+        canExport: { type: Boolean, default: false },
+      },
+    ],
+    allowedBehaviors: [{ type: String }],
     refreshToken: { type: String, default: '' },
     resetPasswordToken: { type: String },
     resetPasswordExpire: { type: Date },
